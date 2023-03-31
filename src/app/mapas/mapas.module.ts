@@ -7,6 +7,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { PrimeNgModule } from '../primeNg/prime-ng/prime-ng.module';
 import { BarraZoomComponent } from './components/barra-zoom/barra-zoom.component';
+import { MarcadoresComponent } from './components/marcadores/marcadores.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { BarraZoomComponent } from './components/barra-zoom/barra-zoom.component
     MapaComponent,
     HeaderComponent,
     MenuComponent,
-    BarraZoomComponent
+    BarraZoomComponent,
+    MarcadoresComponent
   ],
   imports: [
     CommonModule,

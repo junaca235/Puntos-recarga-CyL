@@ -2,5 +2,8 @@
 
 <div id="mapa" class="mapa-container"></div>
 
-<app-barra-zoom></app-barra-zoom>
-<app-menu></app-menu>
+<app-barra-zoom [mapa]="mapa" ></app-barra-zoom>
+
+<app-marcadores [mapa]="mapa" [puntos]="puntos" ></app-marcadores>
+
+<app-menu [mapa]="mapa" [puntos]="puntos"></app-menu>

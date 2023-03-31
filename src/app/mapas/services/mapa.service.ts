@@ -3,19 +3,25 @@ import { HttpClient } from '@angular/common/http';
 
 
 import { Observable } from 'rxjs';
-import { Marcador } from '../interface/punto';
+import { Marcador, Puntos } from '../interface/punto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapaService {
 
-  private _baseUrl: string = "https://analisis.datosabiertos.jcyl.es/api/records/1.0/search/?dataset=puntos-de-recarga-del-vehiculo-electrico&rows=100"
+  private _baseUrl: string = "https://analisis.datosabiertos.jcyl.es/api/records/1.0/search/?dataset=puntos-de-recarga-del-vehiculo-electrico&rows=123"
+
+  /* private _puntos!: Puntos[];
+
+  get puntos() {
+    return this._puntos;
+  } */
 
   constructor(private http: HttpClient) { }
 
-  getPuntos(): Observable<Marcador>{
-    return this.http.get<Marcador>( this._baseUrl );
+  getPuntos(): Observable<Puntos>{
+    return this.http.get<Puntos>( this._baseUrl );
   }
 
 }

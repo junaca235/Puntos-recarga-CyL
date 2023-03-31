@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MapaService } from '../../services/mapa.service';
-import { Marcador } from '../../interface/punto';
+import {  Record } from '../../interface/punto';
+import * as mapboxgl from 'mapbox-gl';
 
 @Component({
   selector: 'app-menu',
@@ -8,13 +9,13 @@ import { Marcador } from '../../interface/punto';
   styles: [`
     #menuButton{
       margin: auto;
-      position: fixed;
+      position: absolute;
       bottom: 25px;
       left: 45vw;
-      z-index:"100"
+     /*  z-index:"100" */
     }
     #menu{
-      position: fixed;
+      position: absolute;
       z-index: "200"
     }
   `]
@@ -23,37 +24,18 @@ export class MenuComponent {
 
   sidebarVisible: boolean = false;
   //puntos!: Punto;
-  puntos: any[] = [
-    {
-      dms: "dms",
-      tipo: "tipo",
-      operador: "operador",
-      dd: [12, 90],
-      no: "2",
-      nombre: "nombre"
-    },
-    {
-      dms: "dms2",
-      tipo: "tipo2",
-      operador: "operador2",
-      dd: [122, 902],
-      no: "2",
-      nombre: "nombre2"
-    }
-  ]
+  @Input()mapa!: mapboxgl.Map;
+  @Input()puntos!: Record[];
 
   constructor(private mapaService: MapaService) {}
 
-  ngOnInit(): void {
-    
+  irMarcador( lat: number, lng: number ) {
+    console.log("Volando voy: ", lat, lng)
 
-    //TODO:recoger los puntos correctamente
-    /* this.mapaService.getPuntos()
-      .subscribe( puntos => {
-        this.puntos = puntos
-        console.log(this.puntos.records)
-      } ) */
-
+    this.mapa.flyTo({
+      center:  [lat, lng],
+      essential: true
+    })
   }
 
 }
