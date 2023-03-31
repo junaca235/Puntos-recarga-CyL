@@ -1,0 +1,29 @@
+
+<p-sidebar [(visible)]="sidebarVisible" position="bottom" styleClass="p-sidebar-md" id="menu">
+    <!-- <ng-template pTemplate="header">Header Content</ng-template>
+    <ng-template pTemplate="content"  styleClass="w-30rem">
+        
+         -->
+        <p-orderList [value]="puntos" [listStyle]="{ 'max-height': '60rem' }"  filterBy="name" filterPlaceholder="Filter by name">
+            <ng-template let-punto pTemplate="item">
+                <div class="flex align-items-center p-2 w-full flex-wrap">
+                    <!-- <div class="w-full text-center lg:w-auto lg:text-left">
+                        <img src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" alt="product.name" class="mr-3 shadow-3 w-7rem mb-3 lg:w-5rem lg:mb-auto" />
+                    </div> -->
+                    <div class="flex-1">
+                        <h5 class="mb-2"> {{ punto.nombre }} </h5>
+                        <i class="pi pi-tag vertical-align-middle mr-2"></i>
+                        <span class="vertical-align-middle line-height-1"> {{ punto.tipo }} </span>
+                    </div>
+                    <div class="flex flex-column align-items-end">
+                        <h6 class="mb-2"> '$ ' + product.price </h6>
+                        <!-- <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)"></p-tag> -->
+                    </div>
+                </div>
+            </ng-template>
+        </p-orderList>
+        
+    <!-- </ng-template>
+    <ng-template pTemplate="footer">Footer Content</ng-template> -->
+</p-sidebar>
+<p-button (click)="sidebarVisible = true" icon="pi pi-arrow-up" id="menuButton"></p-button>
