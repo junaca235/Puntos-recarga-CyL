@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
+import { Usuario } from 'src/app/auth/interfaces/auth.interface';
 
 @Component({
   selector: 'app-header',
@@ -13,5 +14,18 @@ import { Component } from '@angular/core';
   `]
 })
 export class HeaderComponent {
+
+  @Input() usuario: Usuario | undefined;
+
+  ngOnInit(): void {
+    
+    console.log("Header: ", this.usuario)
+
+  }
+
+  //TODO: Eliminar el token en la parte de AUTH.SERVICE
+  logOut() {
+    localStorage.removeItem("token");
+  }
 
 }

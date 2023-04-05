@@ -1,8 +1,11 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, SimpleChanges, ViewChild } from '@angular/core';
 
 import * as mapboxgl from "mapbox-gl"; //Recoge toda la librería y la llama mapboxgl
 import { Record } from '../../interface/punto';
 import { MapaService } from '../../services/mapa.service';
+import { AuthService } from 'src/app/auth/services/auth.service';
+import { catchError } from 'rxjs';
+import { AuthResponse, Usuario } from 'src/app/auth/interfaces/auth.interface';
 
 @Component({
   selector: 'app-mapa',
@@ -20,8 +23,14 @@ export class MapaComponent {
   mapa!: mapboxgl.Map;
   puntos!: Record[];
   center: [number, number] = [-4.723, 41.6551800];
+  private _usuario!: Usuario;
 
-  constructor( private mapaService: MapaService ) {}
+  get usuario() {
+    return this._usuario;
+  }
+
+  constructor( private mapaService: MapaService,
+               private authService: AuthService ) {}
 
   ngOnInit(): void {
     
@@ -38,8 +47,23 @@ export class MapaComponent {
       .subscribe( puntos => {
         this.puntos = puntos.records
         console.log(this.puntos)
-      })
+      }
+    )
+          
+    this.authService.validarToken().subscribe(
+      resp => {
+        if ( resp ) {
+          this._usuario = resp as Usuario;
+          console.log("Usuario: ",this._usuario)
+        }
+      } 
+    )
+    
+  }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
     
   }
 

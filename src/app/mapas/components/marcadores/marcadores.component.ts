@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import * as mapboxgl from "mapbox-gl";
 
 import { Puntos, Record, Marcador } from '../../interface/punto';
@@ -9,25 +9,36 @@ import { Puntos, Record, Marcador } from '../../interface/punto';
   styles: [
   ]
 })
-export class MarcadoresComponent {
+export class MarcadoresComponent extends mapboxgl.Marker{
 
   @Input()puntos: Record[] = []; 
-  @Input()mapa!: mapboxgl.Map; 
-  marcadores = mapboxgl.Marker;
+  @Input()mapa!: mapboxgl.Map;
+
+  marker!: mapboxgl.Marker;
 
   ngOnChanges(): void {
     console.log(this.puntos);
 
-    let marker: mapboxgl.Marker;
+    //let marker: mapboxgl.Marker;
     
     this.puntos?.forEach( punto => {
 
-      marker = new mapboxgl.Marker()
+      this.marker = new mapboxgl.Marker()
         .setLngLat( [punto.fields.dd[1], punto.fields.dd[0]] )
         .addTo(this.mapa)
     })
-    
-    //this.marcadores.push( marker )
+
+    //TODO: Comprobar que se pulsa un marker
+    this.mapa.on("click", ( event ) => {
+      //if( event.originalEvent.target === this.marker.getElement() ){
+        this.mapa.flyTo({
+          center: event.lngLat
+        })
+      //}
+
+        //TODO: Mostrar la info del punto seleccionado en el menu
+    })
+  
   }
 
 }

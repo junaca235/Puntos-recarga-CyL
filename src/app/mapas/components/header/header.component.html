@@ -3,7 +3,8 @@
         <i class="p-toolbar-separator pi pi-bars mr-2"
            style="vertical-align: middle"></i>
     </div>
-    <div class="p-toolbar-group-end">
+    <div class="p-toolbar-group-end"
+         *ngIf="usuario; else logeado">
         <p-button styleClass="p-button-success mr-2"
                   routerLink="/auth/login">
             Iniciar sesión
@@ -13,4 +14,15 @@
             Registrarse
         </p-button>
     </div>
+
+    <ng-template #logeado>
+        <div class="p-toolbar-group-end">
+            <span>{{ usuario?.name }}</span>
+            <p-button styleClass="p-button-danger"
+                      (onClick)="logOut()">
+                Cerrar sesión
+            </p-button>
+        </div>
+    </ng-template>
+    
 </p-toolbar>
