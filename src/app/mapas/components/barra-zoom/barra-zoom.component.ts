@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 
-import * as mapboxgl from "mapbox-gl";
+import {  Map } from 'mapbox-gl';
+import { MapService } from '../../services/map.service';
 
 @Component({
   selector: 'app-barra-zoom',
@@ -20,14 +21,24 @@ import * as mapboxgl from "mapbox-gl";
 })
 export class BarraZoomComponent {
 
-  @Input() mapa! : mapboxgl.Map;
-
+  //@Input() mapa! : mapboxgl.Map;
+  mapa!: Map;
   zoomLevel: number = 0;
   latitud: number = 0;
   longitud: number = 0;
 
+  constructor( private mapService: MapService ) {}
+
   ngOnInit(): void {
+
     
+  }
+
+  ngAfterViewInit(): void {
+    if( !this.mapService.isMapReady ) throw Error("El mapa aún no se ha cargado")
+    
+    this.mapa = this.mapService.mapa as Map;
+
     this.zoomLevel = this.mapa.getZoom();
     this.latitud = this.mapa.getCenter().lat;
     this.longitud = this.mapa.getCenter().lng;
@@ -46,6 +57,10 @@ export class BarraZoomComponent {
       this.latitud = this.mapa.getCenter().lat;
       this.longitud = this.mapa.getCenter().lng;
     })
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    //this.mapa = this.mc.mapa
   }
 
   ngOnDestroy(): void {

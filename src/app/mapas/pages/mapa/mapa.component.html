@@ -1,9 +1,15 @@
-<app-header [usuario]="usuario"></app-header>
 
-<div id="mapa" class="mapa-container"></div>
+<app-loading *ngIf="!isMapaReady; else mapaReady"></app-loading>
 
-<app-barra-zoom [mapa]="mapa" ></app-barra-zoom>
+<div id="mapaElement" class="mapa-container"></div>
+<ng-template #mapaReady>
+    
+    <app-header [usuario]="usuario"></app-header>
 
-<app-marcadores [mapa]="mapa" [puntos]="puntos" ></app-marcadores>
+    <app-barra-zoom></app-barra-zoom>
 
-<app-menu [mapa]="mapa" [puntos]="puntos"></app-menu>
+    <app-marcadores [mapa]="mapa" [puntos]="puntos" ></app-marcadores>
+
+    <app-menu [mapa]="mapa" [puntos]="puntos"></app-menu>
+
+</ng-template>

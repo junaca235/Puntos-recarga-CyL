@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { MapaService } from '../../services/mapa.service';
 import {  Record } from '../../interface/punto';
 import * as mapboxgl from 'mapbox-gl';
+import { MapDataService } from '../../services/mapData.service';
 
 @Component({
   selector: 'app-menu',
@@ -27,7 +27,7 @@ export class MenuComponent {
   @Input()mapa!: mapboxgl.Map;
   @Input()puntos!: Record[];
 
-  constructor(private mapaService: MapaService) {}
+  constructor(private mapDataService: MapDataService) {}
 
   irMarcador( lat: number, lng: number ) {
     console.log("Volando voy: ", lat, lng)

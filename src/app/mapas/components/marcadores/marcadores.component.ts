@@ -1,4 +1,4 @@
-import { Component, HostListener, Input } from '@angular/core';
+import { Component, HostListener, Input, SimpleChanges } from '@angular/core';
 import * as mapboxgl from "mapbox-gl";
 
 import { Puntos, Record, Marcador } from '../../interface/punto';
@@ -16,8 +16,7 @@ export class MarcadoresComponent extends mapboxgl.Marker{
 
   marker!: mapboxgl.Marker;
 
-  ngOnChanges(): void {
-    console.log(this.puntos);
+  ngOnChanges(changes: SimpleChanges): void {
 
     //let marker: mapboxgl.Marker;
     
