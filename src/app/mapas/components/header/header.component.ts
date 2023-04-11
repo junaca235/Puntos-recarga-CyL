@@ -1,4 +1,5 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { Usuario } from 'src/app/auth/interfaces/auth.interface';
 
 @Component({
@@ -17,6 +18,8 @@ export class HeaderComponent {
 
   @Input() usuario: Usuario | undefined;
 
+  constructor( private router: Router ) {}
+
   ngOnInit(): void {
     
     console.log("Header: ", this.usuario)
@@ -26,6 +29,7 @@ export class HeaderComponent {
   //TODO: Eliminar el token en la parte de AUTH.SERVICE
   logOut() {
     localStorage.removeItem("token");
+    location.reload();
   }
 
 }

@@ -1,15 +1,18 @@
 
-<app-loading *ngIf="!isMapaReady; else mapaReady"></app-loading>
+<!-- <app-loading *ngIf="!isMapaReady; else mapaReady"></app-loading>
+ -->
 
-<div id="mapaElement" class="mapa-container"></div>
-<ng-template #mapaReady>
+<!-- <ng-template #mapaReady> -->
     
     <app-header [usuario]="usuario"></app-header>
 
-    <app-barra-zoom></app-barra-zoom>
+    <div id="mapaElement" class="mapa-container"></div>
 
-    <app-marcadores [mapa]="mapa" [puntos]="puntos" ></app-marcadores>
+    <!-- //TODO: Solucionar errores -->
+    <!-- <app-barra-zoom></app-barra-zoom> -->
+
+    <!-- <app-marcadores></app-marcadores> -->
 
     <app-menu [mapa]="mapa" [puntos]="puntos"></app-menu>
 
-</ng-template>
+<!-- </ng-template> -->

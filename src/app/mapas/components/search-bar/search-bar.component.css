@@ -1,0 +1,8 @@
+div:first-of-type{
+    /* display:flex; */
+}
+
+select{
+    width: fit-content;
+    /* display: block; */
+}

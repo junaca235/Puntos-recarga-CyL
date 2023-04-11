@@ -1,0 +1,19 @@
+<div class="search-containe">
+        <input type="text"
+               class="form-control"
+               placeholder="Buscar lugar"
+               #txtQuery
+               (keyup)="onQueryChanged()"
+               #query
+               value="GMS DE GUIJUELO SL">
+        <select class="form-select"
+                (change)="onQueryChanged()"
+                #selectFiltro>
+            <option *ngFor="let filtro of filtros"
+             [value]="filtro.value" >{{ filtro.name }}</option>
+        </select>
+    
+
+    <app-search-bar-results></app-search-bar-results>
+
+</div>

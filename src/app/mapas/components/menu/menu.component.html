@@ -1,33 +1,7 @@
 
 <p-sidebar [(visible)]="sidebarVisible" position="bottom" styleClass="p-sidebar-md" id="menu">
-    <!-- <ng-template pTemplate="header">Header Content</ng-template>-->
-    <!-- <ng-template pTemplate="content"  styleClass="h-60rem"> -->
-        <ul class="list-group">
-            <li class="list-group-item list-group-item-action" *ngFor="let punto of puntos"
-                filterBy="fields.nombre" 
-                filterPlaceholder="Filter by name">
-                <!-- ="irMarcador( punto.fields.dd[1], punto.fields.dd[0] )"> -->
-               
-                <div class="flex align-items-center p-2 w-full flex-wrap">
-                    <div class="flex-1">
-                        <h5 class="mb-2"> {{ punto.fields.nombre }} </h5>
-                        <i class="pi pi-bolt vertical-align-middle mr-2" 
-                        style="font-size: 1.5rem"></i>
-                        <span class="vertical-align-middle line-height-1"> {{ punto.fields.tipo }} </span>
-                    </div>
-                    <div class="flex flex-column align-items-end">
-                        <h6 class="mb-2"> {{ punto.fields.no }} </h6>
-                    </div>
-                    <button type="button" 
-                            class="btn btn-secondary" 
-                            [value]="punto.recordid"
-                            (click)="irMarcador( punto.fields.dd[1], punto.fields.dd[0] )">
-                        Posición
-                    </button>
-                </div>
+    
+    <app-search-bar></app-search-bar>
 
-            </li>
-        </ul>
-    <!-- </ng-template> -->
 </p-sidebar>
 <p-button (click)="sidebarVisible = true" icon="pi pi-arrow-up" id="menuButton"></p-button>

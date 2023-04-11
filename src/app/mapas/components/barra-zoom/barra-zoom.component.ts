@@ -31,10 +31,28 @@ export class BarraZoomComponent {
 
   ngOnInit(): void {
 
-    
+    this.mapa?.on("zoom", () => {
+      this.zoomLevel = this.mapa.getZoom()
+    })
+
+    this.mapa?.on("zoomend", () => {
+      if( this.mapa.getZoom() > 18 ) {
+        this.mapa.zoomTo( 18 );
+      }
+    })
+
+    this.mapa?.on("move", () => {
+      this.latitud = this.mapa.getCenter().lat;
+      this.longitud = this.mapa.getCenter().lng;
+    })
+
   }
 
   ngAfterViewInit(): void {
+    
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
     if( !this.mapService.isMapReady ) throw Error("El mapa aún no se ha cargado")
     
     this.mapa = this.mapService.mapa as Map;
@@ -43,31 +61,14 @@ export class BarraZoomComponent {
     this.latitud = this.mapa.getCenter().lat;
     this.longitud = this.mapa.getCenter().lng;
 
-    this.mapa.on("zoom", () => {
-      this.zoomLevel = this.mapa.getZoom()
-    })
-
-    this.mapa.on("zoomend", () => {
-      if( this.mapa.getZoom() > 18 ) {
-        this.mapa.zoomTo( 18 );
-      }
-    })
-
-    this.mapa.on("move", () => {
-      this.latitud = this.mapa.getCenter().lat;
-      this.longitud = this.mapa.getCenter().lng;
-    })
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    //this.mapa = this.mc.mapa
+    
   }
 
   ngOnDestroy(): void {
     //Eliminamos los Listeners
-    this.mapa.off("zoom", () => {});
-    this.mapa.off("zoomed", () => {});
-    this.mapa.off("move", () => {});
+    this.mapa!.off("zoom", () => {});
+    this.mapa!.off("zoomed", () => {});
+    this.mapa!.off("move", () => {});
 
   }
   

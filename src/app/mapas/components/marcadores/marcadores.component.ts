@@ -1,7 +1,9 @@
-import { Component, HostListener, Input, SimpleChanges } from '@angular/core';
-import * as mapboxgl from "mapbox-gl";
+import { Component, Input, SimpleChanges } from '@angular/core';
+import * as mapboxgl from "mapbox-gl/";
 
-import { Puntos, Record, Marcador } from '../../interface/punto';
+import { Record } from '../../interface/punto';
+import { MapDataService } from '../../services/mapData.service';
+import { MapService } from '../../services/map.service';
 
 @Component({
   selector: 'app-marcadores',
@@ -11,14 +13,34 @@ import { Puntos, Record, Marcador } from '../../interface/punto';
 })
 export class MarcadoresComponent extends mapboxgl.Marker{
 
-  @Input()puntos: Record[] = []; 
-  @Input()mapa!: mapboxgl.Map;
-
+  //@Input()puntos: Record[] = []; 
+  //@Input()mapa!: mapboxgl.Map;
+  puntos: Record[] = []
+  mapa!: mapboxgl.Map;
   marker!: mapboxgl.Marker;
+
+  constructor( private mapDataService: MapDataService,
+               private mapService: MapService ) {
+    super();
+  }
+
+  ngAfterViewInit(): void {
+    
+    this.mapa = this.mapService.mapa as mapboxgl.Map;
+    this.mapDataService.getPuntos()
+      .subscribe( ( resp ) => {
+        this.puntos = resp.records;
+        console.log("Puntos guardados")
+      } )
+    
+      console.log("Puntos: ", this.puntos)
+
+    
+      
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
 
-    //let marker: mapboxgl.Marker;
     
     this.puntos?.forEach( punto => {
 
@@ -26,6 +48,8 @@ export class MarcadoresComponent extends mapboxgl.Marker{
         .setLngLat( [punto.fields.dd[1], punto.fields.dd[0]] )
         .addTo(this.mapa)
     })
+    //let marker: mapboxgl.Marker;
+    
 
     //TODO: Comprobar que se pulsa un marker
     this.mapa.on("click", ( event ) => {

@@ -4,7 +4,7 @@
            style="vertical-align: middle"></i>
     </div>
     <div class="p-toolbar-group-end"
-         *ngIf="usuario; else logeado">
+         *ngIf="!usuario; else logeado">
         <p-button styleClass="p-button-success mr-2"
                   routerLink="/auth/login">
             Iniciar sesión

@@ -26,9 +26,9 @@ export class MapaComponent {
 
   //@ViewChild('mapElement') mapElement!: ElementRef
 
-  get Mapa() {
+  /* get Mapa() {
     return this.mapa;
-  }
+  } */
 
   get usuario() {
     return this._usuario;
@@ -70,13 +70,12 @@ export class MapaComponent {
     });
     console.log(this.mapDataService.userLocation)
 
-    this.mapDataService.getPuntos()
+    /* this.mapDataService.getPuntos()
       .subscribe( puntos => {
         this.puntos = puntos.records
         //console.log(this.puntos)
       }
-    )
-    
+    ) */
 
     //Botón para centrar en la posición del usuario
     this.mapa.addControl(
