@@ -12,11 +12,6 @@ import { MapDataService } from '../../services/mapData.service';
       position: absolute;
       bottom: 25px;
       left: 45vw;
-      /* z-index:"100" */
-    }
-    #menu{
-      position: absolute;
-      z-index: "200"
     }
   `]
 })

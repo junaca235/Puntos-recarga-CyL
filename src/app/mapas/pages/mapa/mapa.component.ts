@@ -44,15 +44,20 @@ export class MapaComponent {
                private cdr: ChangeDetectorRef ) {}
 
   ngOnInit(): void {
-          
-    this.authService.validarToken().subscribe(
-      resp => {
-        if ( resp ) {
-          this._usuario = resp as Usuario;
-          console.log("Usuario: ",this._usuario)
-        }
-      } 
-    )
+    
+    if( localStorage.getItem("token") ) {
+
+      this.authService.validarToken().subscribe(
+        resp => {
+          if ( resp ) {
+            this._usuario = resp as Usuario;
+            console.log("Usuario: ",this._usuario)
+          }
+        } 
+      )
+      
+    }
+
     
   }
 

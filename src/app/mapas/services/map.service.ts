@@ -72,6 +72,13 @@ export class MapService {
 
   getRouteBetweenPoints( start: [number, number], end: [number, number] ) {
 
+    this.markers.forEach( marker => marker.remove() );
+
+    const newMarker = new Marker()
+    .setLngLat( end )
+    .addTo(this.map!);
+    this.markers.push( newMarker );
+
     this.dac.get<DirectionsResponse>(`/${ start.join("%2C") }%3B${ end.join("%2C") }`)
       .subscribe( resp => {
         console.log( resp )
