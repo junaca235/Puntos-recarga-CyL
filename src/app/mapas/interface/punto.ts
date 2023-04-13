@@ -22,6 +22,7 @@ export interface Record {
     fields:           Fields;
     geometry:         Geometry;
     record_timestamp: Date;
+    favourite: Boolean;//Añadido
 }
 
 export interface Fields {

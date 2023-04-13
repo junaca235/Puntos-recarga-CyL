@@ -10,8 +10,9 @@ interface filtro {
   selector: 'app-search-bar',
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.css'],
-  styles: [
-  ]
+  styles: [`
+    
+  `]
 })
 export class SearchBarComponent {
 

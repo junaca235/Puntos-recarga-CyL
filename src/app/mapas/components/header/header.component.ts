@@ -26,7 +26,6 @@ export class HeaderComponent {
 
   }
 
-  //TODO: Eliminar el token en la parte de AUTH.SERVICE
   logOut() {
     localStorage.removeItem("token");
     location.reload();

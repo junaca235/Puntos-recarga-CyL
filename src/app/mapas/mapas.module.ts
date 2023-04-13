@@ -12,6 +12,8 @@ import { MapaComponent } from './pages/mapa/mapa.component';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { SearchBarResultsComponent } from './components/search-bar-results/search-bar-results.component';
 import { LnglatPipe } from './pipes/lnglat.pipe';
+import { LocationButtonComponent } from './components/location-button/location-button.component';
+import { InfoRutaComponent } from './components/info-ruta/info-ruta.component';
 
 
 @NgModule({
@@ -25,6 +27,8 @@ import { LnglatPipe } from './pipes/lnglat.pipe';
     SearchBarComponent,
     SearchBarResultsComponent,
     LnglatPipe,
+    LocationButtonComponent,
+    InfoRutaComponent,
   ],
   imports: [
     CommonModule,

@@ -14,7 +14,7 @@
         filterPlaceholder="Filter by name">
         
         
-        <div class="flex align-items-center p-2 w-full flex-wrap">
+        <div class="flex align-items-center p-2 w-full flex-wrap col-11">
             <div class="flex-1">
                 <h5 class="mb-2"> {{ punto.fields.nombre }} </h5>
                 <i class="pi pi-bolt vertical-align-middle mr-2" 
@@ -35,6 +35,14 @@
                     [value]="punto.recordid"
                     (click)="getDirections( punto )">
                 Ruta
+            </button>
+        </div>
+        <div class="col-1">
+            <button class="p-button p-button-text"
+                    (click)="changeFavourite()">
+                <i class="pi" 
+                   [ngClass]="isFavourite ? 'pi-star-fill' : 'pi-star' "
+                   [style]="{'font-color': 'yellow'}" ></i>
             </button>
         </div>
 

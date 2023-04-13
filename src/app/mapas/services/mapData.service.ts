@@ -28,13 +28,12 @@ export class MapDataService {
     return this._puntos;
   }
 
-  /* get userLocation(): [number, number] | undefined {
-    return this.userLocation;
-  } */
-
   constructor( private http: HttpClient,
                private mapService: MapService ) { 
     this.getUserLocation();
+    this.getPuntos().subscribe( ( puntos ) => {
+      this._puntos = puntos.records;
+    } );
   }
 
   async getUserLocation(): Promise<[number, number]> {

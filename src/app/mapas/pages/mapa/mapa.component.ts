@@ -1,11 +1,12 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 
 import * as mapboxgl from "mapbox-gl"; //Recoge toda la librería y la llama mapboxgl
-import { Record } from '../../interface/punto';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import {  Usuario } from 'src/app/auth/interfaces/auth.interface';
+import { Usuario } from 'src/app/auth/interfaces/auth.interface';
 import { MapDataService } from '../../services/mapData.service';
 import { MapService } from '../../services/map.service';
+import { switchMap, tap } from 'rxjs';
+import { Record } from '../../interface/punto';
 
 @Component({
   selector: 'app-mapa',
@@ -19,16 +20,9 @@ import { MapService } from '../../services/map.service';
 })
 export class MapaComponent {
 
-  mapa!: mapboxgl.Map;
-  puntos!: Record[];
-  center: [number, number] = [-4.723, 41.6551800];
+  private mapa!: mapboxgl.Map;
+  private puntos: Record[] = [];
   private _usuario!: Usuario;
-
-  //@ViewChild('mapElement') mapElement!: ElementRef
-
-  /* get Mapa() {
-    return this.mapa;
-  } */
 
   get usuario() {
     return this._usuario;
@@ -41,7 +35,7 @@ export class MapaComponent {
   constructor( private mapDataService: MapDataService,
                private mapService: MapService,
                private authService: AuthService,
-               private cdr: ChangeDetectorRef ) {}
+               /* private cdr: ChangeDetectorRef */ ) {}
 
   ngOnInit(): void {
     
@@ -53,58 +47,42 @@ export class MapaComponent {
             this._usuario = resp as Usuario;
             console.log("Usuario: ",this._usuario)
           }
-        } 
-      )
-      
+        } )
     }
 
-    
   }
 
   ngAfterViewInit(): void {
 
-    //if ( !this.mapDataService.userLocation ) throw Error('No hay placesService.userLocation');
-    
-    this.mapa = new mapboxgl.Map({
-      container: "mapaElement",
-      style: 'mapbox://styles/mapbox/streets-v11',
-      center: this.center,
-      zoom: 7.5,
-      maxZoom: 18,
-      minZoom: 4
+    this.mapService.mapa$
+      .pipe(
+        switchMap( () => {
+          return this.mapDataService.getPuntos()
+        }),
+        tap(        
+        )
+      )
+      .subscribe(( puntos ) => {
+
+        //this.puntos = puntos.records;
+        /* puntos.records.forEach(punto => {
+          this.puntos.push({
+            id: punto.fields.dd.join("-"),
+            punto: punto
+          })
+        }); */
+        this.puntos = puntos.records;
+      
+          const userLocation = this.mapDataService.userLocation;
+
+            this.mapService.generarMarkers( this.puntos, userLocation! )
+
+            this.mapService.mapa?.setCenter( userLocation || this.mapService.mapa.getCenter() );
     });
+
     console.log(this.mapDataService.userLocation)
 
-    /* this.mapDataService.getPuntos()
-      .subscribe( puntos => {
-        this.puntos = puntos.records
-        //console.log(this.puntos)
-      }
-    ) */
-
-    //Botón para centrar en la posición del usuario
-    this.mapa.addControl(
-      new mapboxgl.GeolocateControl({
-        positionOptions: {
-        enableHighAccuracy: true
-        },
-        // When active the map will receive updates to the device's location as it changes.
-        trackUserLocation: true,
-        // Draw an arrow next to the location dot to indicate which direction the device is heading.
-        showUserHeading: true
-        }), "bottom-right"
-    )
-
-    new mapboxgl.Marker({
-      color: "green"
-    })
-    .setLngLat( this.mapDataService.userLocation || this.center )
-    .addTo( this.mapa );
-
-    this.cdr.detectChanges();
-    
-    this.mapService.setMap( this.mapa );
-
+    //this.cdr.detectChanges();
   }
 
 }

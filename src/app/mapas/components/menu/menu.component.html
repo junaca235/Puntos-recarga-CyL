@@ -1,7 +1,13 @@
 
-<p-sidebar  [(visible)]="sidebarVisible" position="bottom" styleClass="p-sidebar-md" id="menu">
+<p-sidebar  [(visible)]="sidebarVisible" 
+            position="bottom" 
+            styleClass="p-sidebar-lg" 
+            id="menu"><!-- [style]="{ 'height': '60vh' }" -->
 
     <app-search-bar></app-search-bar>
 
 </p-sidebar>
-<p-button (click)="sidebarVisible = true" icon="pi pi-arrow-up" id="menuButton"></p-button>
+<p-button (click)="sidebarVisible = true" 
+          icon="pi pi-arrow-up" 
+          id="menuButton">
+</p-button>

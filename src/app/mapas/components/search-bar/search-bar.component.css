@@ -1,5 +1,13 @@
 
+
+input, select {
+    position: sticky;
+    top: 0px;
+    z-index: 100;
+}
+input{
+    width: 200px;
+}
 select{
     width: fit-content;
-    /* display: block; */
 }

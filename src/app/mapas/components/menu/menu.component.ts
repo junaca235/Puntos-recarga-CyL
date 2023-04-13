@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import {  Record } from '../../interface/punto';
 import * as mapboxgl from 'mapbox-gl';
-import { MapDataService } from '../../services/mapData.service';
+import { MapService } from '../../services/map.service';
 
 @Component({
   selector: 'app-menu',
@@ -19,18 +19,28 @@ export class MenuComponent {
 
   sidebarVisible: boolean = false;
   //puntos!: Punto;
-  @Input()mapa!: mapboxgl.Map;
-  @Input()puntos!: Record[];
+  /* @Input()mapa!: mapboxgl.Map;
+  @Input()puntos!: Record[]; */
 
-  constructor(private mapDataService: MapDataService) {}
+  constructor(private mapService: MapService) {}
 
-  irMarcador( lat: number, lng: number ) {
+  ngOnInit(): void {
+    
+    this.mapService.popupInfo
+      .subscribe( ( data ) => {
+        console.log( data )
+        
+      })
+
+  }
+
+  /* irMarcador( lat: number, lng: number ) {
     console.log("Volando voy: ", lat, lng)
 
     this.mapa.flyTo({
       center:  [lat, lng],
       essential: true
     })
-  }
+  } */
 
 }

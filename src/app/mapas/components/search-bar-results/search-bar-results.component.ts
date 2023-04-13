@@ -2,20 +2,31 @@ import { Component } from '@angular/core';
 import { MapDataService } from '../../services/mapData.service';
 import { MapService } from '../../services/map.service';
 import { Record } from '../../interface/punto';
-import { LngLatLike } from 'mapbox-gl';
 
 @Component({
   selector: 'app-search-bar-results',
   templateUrl: './search-bar-results.component.html',
-  styles: [
-  ]
+  styles: [`
+    ul{
+      padding: 0px
+    }
+    li{
+      display:flex;
+      flex-direction: row;
+    }
+    button:focus{
+      outline: none;
+    }
+    button>i{
+      color: lightgreen; 
+    }
+  `]
 })
 export class SearchBarResultsComponent {
 
 
   selectedId: string = "";
-  constructor( private mapDataService: MapDataService,
-               private mapService: MapService ) {}
+  isFavourite: boolean = false;
 
   get isLoadingPuntos() {
     return this.mapDataService.isLoadingPuntos;
@@ -23,6 +34,15 @@ export class SearchBarResultsComponent {
 
   get puntos() {
     return this.mapDataService.puntos;
+  }
+
+  constructor( private mapDataService: MapDataService,
+               private mapService: MapService ) {}
+
+  ngOnInit(): void {
+    
+    
+
   }
 
   flyTo( punto: Record ){
@@ -36,6 +56,10 @@ export class SearchBarResultsComponent {
 
     this.mapService.getRouteBetweenPoints( this.mapDataService.userLocation , [ punto.fields.dd[1], punto.fields.dd[0] ] )
 
+  }
+
+  changeFavourite() {
+    this.isFavourite = !this.isFavourite;
   }
 
 }

@@ -1,18 +1,13 @@
 
-<!-- <app-loading *ngIf="!isMapaReady; else mapaReady"></app-loading>
- -->
+<app-header [usuario]="usuario"></app-header>
 
-<!-- <ng-template #mapaReady> -->
-    
-    <app-header [usuario]="usuario"></app-header>
+<app-location-button></app-location-button>
 
-    <div id="mapaElement" class="mapa-container"></div>
+<!-- <app-info-ruta></app-info-ruta> -->
 
-    <!-- //TODO: Solucionar errores -->
-    <!-- <app-barra-zoom></app-barra-zoom> -->
+<div id="mapaElement" class="mapa-container"></div>
 
-    <!-- <app-marcadores></app-marcadores> -->
+<!-- //TODO: Solucionar errores -->
+<!-- <app-barra-zoom></app-barra-zoom> -->
 
-    <app-menu [mapa]="mapa" [puntos]="puntos"></app-menu>
-
-<!-- </ng-template> -->
+<app-menu></app-menu>
