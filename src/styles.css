@@ -2,11 +2,17 @@ html, body {
     width: 100%;
     height: 100%;
     
-    --primary: #98F01D;
-    --secondary: #B8F266;
-    --terciary: #55702F;
+    --primary: #E6F4EA;/* #98F01D; */
+    --secondary: #B8DFC8;/* #B8F266; */
+    --terciary: #89C7A8;/* #55702F; */
     --black: #000;
     --font-family: ;
+
+    --a: #E6F4EA;
+    --b: #B8DFC8;
+    --c: #89C7A8;
+    --d: #5EA68D;
+    --e: #38726C;
 }
   
 

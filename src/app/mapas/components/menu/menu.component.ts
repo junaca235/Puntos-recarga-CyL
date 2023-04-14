@@ -28,8 +28,8 @@ export class MenuComponent {
     
     this.mapService.popupInfo
       .subscribe( ( data ) => {
-        console.log( data )
-        
+        this.sidebarVisible = true;
+        //this.mapService.selectMarker( data );
       })
 
   }

@@ -4,6 +4,7 @@ import { Record} from '../interface/punto';
 import { DirectionsApiClient } from '../api';
 import { DirectionsResponse, Route } from '../interface/direction';
 import { Observable, Observer, Subject } from 'rxjs';
+import { MapDataService } from './mapData.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class MapService {
   private ruta: Route | undefined;
   private center: [number, number] = [-4.723, 41.6551800];
   private popupData = new Subject<LngLat>();
+  private userLocation?: [number, number];
 
   get mapa(){
     return this.map;
@@ -35,7 +37,7 @@ export class MapService {
   }
 
 
-  constructor( private dac: DirectionsApiClient ) {
+  constructor( private dac: DirectionsApiClient) {
     this.createMap();
   }
 
@@ -44,9 +46,18 @@ export class MapService {
     this.map = map;
   }
 
+  setUserLocation( coords: [number, number] ) {
+    this.userLocation = coords;
+  }
+
   flyTo( coords: LngLatLike ) {
     
     if ( !this.isMapReady)  throw Error("El mapa no está inicializado");
+
+    if( !this.markers.find( m => m.setLngLat( coords ) ) ){
+      console.log(" Marcador no encontrado ")
+    }
+    //console.log( this.markers )
 
     this.map?.flyTo( {
       center: coords
@@ -113,7 +124,7 @@ export class MapService {
     this.map.fitBounds( this.bounds, {
       padding: 20
     } )
-    console.log(this.markers)
+    console.log("generarMarkers: ",this.markers)
   }
 
   getRouteBetweenPoints( start: [number, number], end: [number, number] ) {
@@ -136,6 +147,7 @@ export class MapService {
       } );
 
   }
+  //TODO: resetear la lista
 
   private drawPolyLine( route: Route ) {
     console.log( { km: route.distance / 1000 } );
@@ -168,10 +180,8 @@ export class MapService {
       }
     }
     
-    if( this.map?.getSource( "RouteString" ) ) {
-      this.map?.removeLayer( "RouteString" )
-      this.map?.removeSource( "RouteString" )
-    }  
+    this.borrarRuta();
+     
     this.map?.addSource( "RouteString", sourceData );
 
     this.map?.addLayer({
@@ -188,6 +198,13 @@ export class MapService {
       }
     });
 
+  }
+
+  borrarRuta() {
+    if( this.map?.getSource( "RouteString" ) ) {
+      this.map?.removeLayer( "RouteString" )
+      this.map?.removeSource( "RouteString" )
+    } 
   }
 
   createNewMarker( lnglat: [number, number], color?: string ): Marker {
@@ -211,9 +228,15 @@ export class MapService {
   }
 
   clickPopup( data: LngLat ) {
+    if( data.toArray() === this.userLocation ) return
+    console.log(this.userLocation)
     this.popupData.next( data )
+    this.flyTo( data );
   }
 
+  selectMarker( coords: LngLat ): LngLat {
+    return coords
+  }
 
 
 }

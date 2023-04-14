@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { Puntos, Record } from '../interface/punto';
 import Swal from 'sweetalert2';
 import { MapService } from './map.service';
+import { DirectionsResponse } from '../interface/direction';
+import { DirectionsApiClient } from '../api';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +31,8 @@ export class MapDataService {
   }
 
   constructor( private http: HttpClient,
-               private mapService: MapService ) { 
+               private mapService: MapService,
+               private dac: DirectionsApiClient ) { 
     this.getUserLocation();
     this.getPuntos().subscribe( ( puntos ) => {
       this._puntos = puntos.records;
@@ -44,6 +47,7 @@ export class MapDataService {
         ({ coords }) => {
           this.userLocation = [coords.longitude, coords.latitude];
           console.log( coords )
+          this.mapService.setUserLocation( [coords.latitude, coords.longitude] );
           resolve( this.userLocation );
         },
           ( err ) => {
@@ -66,10 +70,19 @@ export class MapDataService {
 
     this.http.get<Puntos>(`${this._baseUrl}&refine.${field}=${busqueda}`)
       .subscribe( ( puntos ) => {
-        this._puntos = puntos.records;
-        this.isLoadingPuntos = false;
+        this.actualizarPuntos( puntos.records );
         this.mapService.generarMarkers( this._puntos, this.userLocation! );
       })
+  }
+
+  /* getDirectionRoute(start: [number, number], end: [number, number]) {
+    return this.dac.get<DirectionsResponse>(`/${ start.join("%2C") }%3B${ end.join("%2C") }`);
+  } */
+
+  actualizarPuntos( puntos: Record[] ) {
+    this.mapService.borrarRuta();
+    this._puntos = puntos;
+    this.isLoadingPuntos = false;
   }
 
 }

@@ -23,7 +23,7 @@ export class SearchBarComponent {
   filtros: filtro[] = [
     {
       name: "nombre",
-      value: "name"
+      value: "nombre"
     },
     {
       name: "tipo",

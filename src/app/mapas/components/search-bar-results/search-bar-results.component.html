@@ -3,16 +3,14 @@
     <h6>Cargando</h6>
 </div>
 
-<ng-template #name></ng-template>
-
 <ul *ngIf="puntos"
     class="list-group mt-2">
     <li *ngFor="let punto of puntos"
         class="list-group-item list-group-item-action"
-        [class.active]="punto.recordid === selectedId"
-        filterBy="fields.nombre" 
-        filterPlaceholder="Filter by name">
-        
+        [class.active]="punto.fields.dd.join(',') === selectedId"
+        filterPlaceholder="Filter by name"
+        id="{{punto.fields.dd.join(',')}}"
+        (click)="flyTo( punto )">
         
         <div class="flex align-items-center p-2 w-full flex-wrap col-11">
             <div class="flex-1">
@@ -24,12 +22,12 @@
             <div class="flex flex-column align-items-end">
                 <h6 class="mb-2"> Nº conectores: {{ punto.fields.no }} </h6>
             </div>
-            <button type="button" 
+            <!-- <button type="button" 
                     class="btn btn-secondary" 
                     [value]="punto.recordid"
                     (click)="flyTo( punto )">
                 Posición
-            </button>
+            </button> -->
             <button type="button" 
                     class="btn btn-secondary" 
                     [value]="punto.recordid"
