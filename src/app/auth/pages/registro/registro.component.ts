@@ -33,12 +33,11 @@ export class RegistroComponent {
 
     this.authService.registro(name, password)
       .subscribe( ok => {
-        console.log(ok)
         if ( ok === true ) {
-          this.router.navigateByUrl("/mapas");
+          Swal.fire( "Guardado", "Usuario registrado", "success" );
         } else {
           //Muestra una alerta personalizada
-          Swal.fire( "Error", ok+"", "error" );
+          Swal.fire( "Error", ok, "error" );
         }
       })
 
