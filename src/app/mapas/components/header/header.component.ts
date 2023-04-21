@@ -1,6 +1,7 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Usuario } from 'src/app/auth/interfaces/auth.interface';
+import { MapDataService } from '../../services/mapData.service';
 
 @Component({
   selector: 'app-header',
@@ -16,13 +17,16 @@ import { Usuario } from 'src/app/auth/interfaces/auth.interface';
 })
 export class HeaderComponent {
 
-  @Input() usuario: Usuario | undefined;
+  //@Input() usuario: Usuario | undefined;
 
-  constructor( private router: Router ) {}
+  usuario: string | undefined;
+
+  constructor( private router: Router,
+               private mapDataService: MapDataService ) {}
 
   ngOnInit(): void {
     
-    console.log("Header: ", this.usuario)
+    this.usuario = this.mapDataService.usuario?.name;
 
   }
 

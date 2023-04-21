@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Observable, catchError, map, of, tap } from 'rxjs';
+import { Observable, Subject, catchError, map, of, tap } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthResponse, Usuario } from '../interfaces/auth.interface';
 
@@ -9,12 +9,12 @@ import { AuthResponse, Usuario } from '../interfaces/auth.interface';
 })
 export class AuthService {
 
-  private _baseUrl = environment.baseUrl;
-  private _usuario!: Usuario;
+  private _baseUrl = environment.mongoUrl;
+  usuario = new Subject<AuthResponse>();
 
-  get usuario() {
-    return {...this._usuario}
-  }
+  /* get usuario() {
+    return {...this._usuario.asObservable()}
+  } */
 
   constructor( private http: HttpClient ) { }
 
@@ -29,10 +29,10 @@ export class AuthService {
           if( resp.ok ) {
             
             localStorage.setItem("token", resp.token!);
-            this._usuario = {
+            this.usuario.next( resp );/* {
               name: resp.name!,
               uid: resp.uid!,
-            }
+            } */
 
           }
         } ),
@@ -46,15 +46,14 @@ export class AuthService {
     const url = `${this._baseUrl}/auth/new`;
     const body = { name, password }
 
-    return this.http.post( url, body )
+    return this.http.post<AuthResponse>( url, body )
       .pipe(
-        tap( resp => {
-          console.log(resp)
-          /* if( ok ) {
+        tap( ({ok, token}) => {
+          if( ok ) {
             localStorage.setItem("token", token!);
-          } */
+          }
         } ),
-        map( resp => resp ),
+        map( resp => resp.ok ),
         catchError( err => of(err.error.msg))
       )
 
@@ -77,11 +76,30 @@ export class AuthService {
 
     return this.http.get<AuthResponse>( url , { headers } )
     .pipe(
-      map( resp => {
+      tap( resp => {
         return resp
       } ),
+      map( resp => resp.ok ),
       catchError( err => of(false) )
     )
 
   }
+
+  /* buscarPuntos( name: string ): Observable<AuthResponse | boolean> {
+
+    const url = `${ this._baseUrl }/searchPuntos`;
+    const body = { name };
+
+    return this.http.post<AuthResponse>( url, body )
+      .pipe(
+        tap( ( usuario ) => {
+          if( usuario.ok ) {
+            return 
+          }
+        } ),
+        map( resp => resp.ok ),
+        catchError( err => of(err.error.msg))
+      )
+
+  } */
 }

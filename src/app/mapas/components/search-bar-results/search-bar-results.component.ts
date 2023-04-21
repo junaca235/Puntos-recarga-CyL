@@ -27,6 +27,7 @@ export class SearchBarResultsComponent {
   @ViewChild("elementLi") elementLi!: ElementRef;
   selectedId: string = "";
   isFavourite: boolean = false;
+  puntosFavoritos: string[] | undefined;
 
   get isLoadingPuntos() {
     return this.mapDataService.isLoadingPuntos;
@@ -49,6 +50,9 @@ export class SearchBarResultsComponent {
         this.scrollToListItem( coord )
         //this.mapService.selectMarker( data );
       })
+
+      this.puntosFavoritos = this.mapDataService.puntosFavoritos;
+      console.log( this.puntosFavoritos )
 
   }
 

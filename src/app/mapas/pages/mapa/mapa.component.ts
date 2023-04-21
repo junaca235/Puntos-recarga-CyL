@@ -34,23 +34,8 @@ export class MapaComponent {
 
   constructor( private mapDataService: MapDataService,
                private mapService: MapService,
-               private authService: AuthService,
-               /* private cdr: ChangeDetectorRef */ ) {}
+               private authService: AuthService ) {}
 
-  ngOnInit(): void {
-    
-    if( localStorage.getItem("token") ) {
-
-      this.authService.validarToken().subscribe(
-        resp => {
-          if ( resp ) {
-            this._usuario = resp as Usuario;
-            console.log("Usuario: ",this._usuario)
-          }
-        } )
-    }
-
-  }
 
   ngAfterViewInit(): void {
 
@@ -64,13 +49,6 @@ export class MapaComponent {
       )
       .subscribe(( puntos ) => {
 
-        //this.puntos = puntos.records;
-        /* puntos.records.forEach(punto => {
-          this.puntos.push({
-            id: punto.fields.dd.join("-"),
-            punto: punto
-          })
-        }); */
         this.puntos = puntos.records;
       
           const userLocation = this.mapDataService.userLocation;
@@ -80,9 +58,6 @@ export class MapaComponent {
             this.mapService.mapa?.setCenter( userLocation || this.mapService.mapa.getCenter() );
     });
 
-    console.log(this.mapDataService.userLocation)
-
-    //this.cdr.detectChanges();
   }
 
 }

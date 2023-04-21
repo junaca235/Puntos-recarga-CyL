@@ -124,7 +124,7 @@ export class MapService {
     this.map.fitBounds( this.bounds, {
       padding: 20
     } )
-    console.log("generarMarkers: ",this.markers)
+
   }
 
   getRouteBetweenPoints( start: [number, number], end: [number, number] ) {

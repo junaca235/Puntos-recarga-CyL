@@ -9,6 +9,9 @@
         <select class="form-select"
                 (change)="onQueryChanged()"
                 #selectFiltro>
+                <option value=""></option>
+                <option value="favoritos"
+                        *ngIf="hasFavPoints"> favoritos </option>
             <option *ngFor="let filtro of filtros"
              [value]="filtro.value" >{{ filtro.name }}</option>
         </select>
