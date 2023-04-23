@@ -1,0 +1,99 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    
+    --primary: #E6F4EA;/* #98F01D; */
+    --secondary: #B8DFC8;/* #B8F266; */
+    --terciary: #89C7A8;/* #55702F; */
+    --black: #000;
+    --font-family: ;
+
+    --a: #E6F4EA;
+    --b: #B8DFC8;
+    --c: #89C7A8;
+    --d: #5EA68D;
+    --e: #38726C;
+}
+  
+
+/**************************  LOGIN / REGISTRO  **********************/
+.arrow-return{
+  color: var(--terciary);
+  position: absolute;
+  font-size: 1.5rem;
+  top: 20px;
+  right: 20px;
+}
+.mobile {
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+.formulario {
+  background-color: var(--primary);
+  border-radius: 50px 50px 0px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.form-content {
+  padding: 15px 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 100%;
+  max-width: 500px;
+  height: 50vh;
+}
+.titulo {
+  align-items: center;
+  margin-bottom: 30px;
+}
+.log-in {
+  color: var(--black);
+  text-align: center;/* 
+  font-family: var(--roboto-mono-40-bold-family);
+  font-size: var(--roboto-mono-40-bold-size);
+  font-weight: var(--roboto-mono-40-bold-weight);
+  line-height: var(--roboto-mono-40-bold-line-height); */
+}
+.input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+}
+.input-name {
+  color: var(--black);
+  text-align: center;
+  margin-bottom: 16px;
+}
+.input {
+  background-color: rgba(245, 245, 245, 1);
+  overflow: hidden;
+  border-radius: 25px;
+  padding: 15px 30px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25) inset;
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+}
+.boton {
+  background-color: var(--terciary);
+  border-radius: 50px;
+  padding: 10px 30px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.sign-in {
+  padding: 0 1px 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

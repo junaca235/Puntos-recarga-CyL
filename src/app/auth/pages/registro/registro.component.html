@@ -1,0 +1,50 @@
+<a routerLink="">
+    <i class="pi pi-arrow-left arrow-return"></i>
+</a>
+
+<form class="mobile" 
+      autocomplete="off"
+      [formGroup]="miFormulario"
+      (ngSubmit)="registro()">
+
+    <div class="formulario">
+      <div class="form-content">
+
+        <h2 class="titulo log-in">Registro</h2>
+
+        <div class="input-container">
+          <input class="input"
+                 type="text"
+                 placeholder="Nombre"
+                 formControlName="name">
+        </div>
+        <div class="input-container">
+          <input class="input"
+                 type="password"
+                 placeholder="Password"
+                 formControlName="password">
+        </div>
+        
+        <div class="input-container">
+          <input class="input"
+                 type="password"
+                 placeholder="Confirmar"
+                 formControlName="confirmar">
+        </div>
+
+        <button type="submit" 
+                class="boton"
+                [disabled]="miFormulario.invalid">
+                Submit
+        </button>
+
+        <div class="sign-in">
+          <span class="not-tienes-cuenta">¿Ya tienes cuenta?</span>
+          <a class="crear-una-aqui"
+             routerLink="/auth">INICIAR SESIÓN</a>
+        </div>
+
+      </div>
+    </div>
+
+</form>
