@@ -53,13 +53,15 @@ export class SearchBarComponent {
       
       const filtro = this.selectFiltro.nativeElement.value;
 
-      if( filtro === "favoritos" ) {
+      if( query === "" ){
+        this.mapDataService.getPuntos();
+      } else if( filtro === "favoritos" ) {
         this.mapDataService.getFavPoints();
       } else {
         this.mapDataService.getPuntosBy( query, filtro );
       }
   
-      
+      this.query.nativeElement.value = "";
 
     }, 500 );
     

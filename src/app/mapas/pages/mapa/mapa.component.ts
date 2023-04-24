@@ -40,23 +40,12 @@ export class MapaComponent {
   ngAfterViewInit(): void {
 
     this.mapService.mapa$
-      .pipe(
-        switchMap( () => {
-          return this.mapDataService.getPuntos()
-        }),
-        tap(        
-        )
-      )
-      .subscribe(( puntos ) => {
+      .subscribe( () => {
+        this.mapDataService.getPuntos();
+        const userLocation = this.mapDataService.userLocation;
+        this.mapService.mapa?.setCenter( userLocation || this.mapService.mapa.getCenter() );
 
-        this.puntos = puntos.records;
-      
-          const userLocation = this.mapDataService.userLocation;
-
-            this.mapService.generarMarkers( this.puntos, userLocation! )
-
-            this.mapService.mapa?.setCenter( userLocation || this.mapService.mapa.getCenter() );
-    });
+      } )
 
   }
 

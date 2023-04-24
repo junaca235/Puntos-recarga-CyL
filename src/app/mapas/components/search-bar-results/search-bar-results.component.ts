@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MapDataService } from '../../services/mapData.service';
 import { MapService } from '../../services/map.service';
 import { Record } from '../../interface/punto';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
   selector: 'app-search-bar-results',
@@ -11,6 +12,7 @@ import { Record } from '../../interface/punto';
       padding: 0px
     }
     li{
+      cursor: pointer;
       display:flex;
       flex-direction: row;
     }
@@ -26,7 +28,7 @@ export class SearchBarResultsComponent {
 
   @ViewChild("elementLi") elementLi!: ElementRef;
   selectedId: string = "";
-  isFavourite: boolean = false;
+  /* isFavourite: boolean = false; */
   puntosFavoritos: string[] | undefined;
 
   get isLoadingPuntos() {
@@ -38,7 +40,8 @@ export class SearchBarResultsComponent {
   }
 
   constructor( private mapDataService: MapDataService,
-               private mapService: MapService ) {}
+               private mapService: MapService,
+               private authService: AuthService ) {}
 
   ngOnInit(): void {
     
@@ -52,7 +55,7 @@ export class SearchBarResultsComponent {
       })
 
       this.puntosFavoritos = this.mapDataService.puntosFavoritos;
-      console.log( this.puntosFavoritos )
+      //console.log( this.puntosFavoritos )
 
   }
 
@@ -81,8 +84,18 @@ export class SearchBarResultsComponent {
 
   }
 
-  changeFavourite() {
-    this.isFavourite = !this.isFavourite;
+  changeFavourite( recordid: string ) {
+    const punto =  this.puntos.find( punto => punto.recordid === recordid );
+    
+    this.authService.changeFavPoint( recordid, punto!.favourite )
+      .subscribe( ok => {
+        if( ok ) {
+          punto!.favourite = punto!.favourite;
+          //TODO: Cambiar el valor favourite del punto elegido
+        }
+      });
+
+    /* this.isFavourite = !this.isFavourite; */
   }
 
 }

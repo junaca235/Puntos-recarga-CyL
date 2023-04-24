@@ -4,7 +4,6 @@ import { Record} from '../interface/punto';
 import { DirectionsApiClient } from '../api';
 import { DirectionsResponse, Route } from '../interface/direction';
 import { Observable, Observer, Subject } from 'rxjs';
-import { MapDataService } from './mapData.service';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +36,7 @@ export class MapService {
   }
 
 
-  constructor( private dac: DirectionsApiClient) {
+  constructor( private dac: DirectionsApiClient ) {
     this.createMap();
   }
 
@@ -82,6 +81,7 @@ export class MapService {
         observer.next( this.map! );
         observer.complete;
       })
+      
     })
   }
 
@@ -105,12 +105,6 @@ export class MapService {
 
     newMarker = this.createNewMarker( userLocation, "green" )
         .addTo(this.map!);
-
-    /* newMarker.getElement().addEventListener("click", (event) => {
-      //TODO: Pulsar el marcador
-      console.log(event.target)
-    }) */
-
 
     this.markers = newMarkers;
 
@@ -147,7 +141,6 @@ export class MapService {
       } );
 
   }
-  //TODO: resetear la lista
 
   private drawPolyLine( route: Route ) {
     console.log( { km: route.distance / 1000 } );
@@ -222,7 +215,6 @@ export class MapService {
     })
     .setLngLat( lnglat )
     .setPopup( popup );
-    //console.log( newMarker.getElement() ) 
     
     return newMarker;
   }
