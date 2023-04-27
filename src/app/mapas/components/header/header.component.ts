@@ -1,6 +1,4 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
-import { Router } from '@angular/router';
-import { Usuario } from 'src/app/auth/interfaces/auth.interface';
 import { MapDataService } from '../../services/mapData.service';
 
 @Component({
@@ -21,8 +19,7 @@ export class HeaderComponent {
 
   usuario: string | undefined;
 
-  constructor( private router: Router,
-               private mapDataService: MapDataService ) {}
+  constructor( private mapDataService: MapDataService ) {}
 
   ngOnInit(): void {
     

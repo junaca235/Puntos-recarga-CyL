@@ -10,11 +10,12 @@ import { AuthResponse, Usuario } from '../interfaces/auth.interface';
 export class AuthService {
 
   private _baseUrl = environment.mongoUrl;
-  usuario = new Subject<AuthResponse>();
+  //private _usuario = new Subject<AuthResponse>();
+  private user!: AuthResponse;
 
-  /* get usuario() {
-    return this._usuario.subscribe()
-  } */
+  get usuario() {
+    return this.user;
+  }
 
   constructor( private http: HttpClient ) { }
 
@@ -29,7 +30,8 @@ export class AuthService {
           if( resp.ok ) {
             
             localStorage.setItem("token", resp.token!);
-            this.usuario.next( resp );
+            //this._usuario.next( resp );
+            this.user = resp;
           }
         } ),
         map( resp => resp.ok ),
@@ -88,18 +90,18 @@ export class AuthService {
     if( isfavourite ) url += "deletePunto";
     else url += "newPunto";
 
-    console.log( url )
-    //TODO: Cambiar por el nombre del usuario actual
-    const body = { name: "Test1", recordid}
+    const body = { name: this.user.name, recordid}
 
     return this.http.post<AuthResponse>(url, body)
     .pipe(
-      tap(resp => resp.ok),
+      //tap(resp => resp.ok),
       map(resp => {
-        console.log(resp.ok);
         return resp.ok;
       }),
-      catchError(err => err.error)
+      catchError(err => {
+        console.error(err);
+        return of(false);
+      })
     );
   }
 

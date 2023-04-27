@@ -46,6 +46,8 @@ export class MapaComponent {
         this.mapService.mapa?.setCenter( userLocation || this.mapService.mapa.getCenter() );
 
       } )
+    
+    this.mapDataService.getPuntos().subscribe();
 
   }
 

@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 
-import { Observable, combineLatest, forkJoin, switchMap } from 'rxjs';
 import { Puntos, Record } from '../interface/punto';
-import Swal from 'sweetalert2';
 import { MapService } from './map.service';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { AuthResponse } from 'src/app/auth/interfaces/auth.interface';
-import { waitForAsync } from '@angular/core/testing';
+
+import { Observable, Subject, forkJoin, map } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +17,7 @@ import { waitForAsync } from '@angular/core/testing';
 export class MapDataService {
 
   private _baseUrl: string = environment.jcylUrl;
-  private _puntos!: Record[];
-  private _usuario: AuthResponse | undefined;
+  private _puntos = new Subject<Record[]>();
   private _favPoints: string[] | undefined;
 
   isLoadingPuntos: boolean = false;
@@ -31,11 +30,11 @@ export class MapDataService {
   }
 
   get puntos(){
-    return this._puntos;
+    return this._puntos.asObservable();
   }
 
   get usuario() {
-    return this._usuario;
+    return this.authService.usuario;
   }
 
   get favPoints() {
@@ -43,7 +42,7 @@ export class MapDataService {
   }
 
   get puntosFavoritos() {
-    return this._usuario?.recordid;
+    return this.authService.usuario?.recordid;
   }
 
   constructor( private http: HttpClient,
@@ -52,15 +51,13 @@ export class MapDataService {
 
     this.getUserLocation();
 
-    /* this.getPuntos().subscribe( ( puntos ) => {
-      this._puntos = puntos.records;
-    } ); */
-
-    this.authService.usuario
+   /*  this.authService.usuario
       .subscribe( usuario => {
         this._usuario = usuario;
         this._favPoints = usuario.recordid ;
-      } );
+      } ); */
+      //this._usuario = this.authService.usuario;
+      //this._favPoints = this.authService.usuario?.recordid;
 
   }
 
@@ -71,43 +68,43 @@ export class MapDataService {
       navigator.geolocation.getCurrentPosition(
         ({ coords }) => {
           this.userLocation = [coords.longitude, coords.latitude];
-          /* console.log( coords ) */
+          
           this.mapService.setUserLocation( [coords.latitude, coords.longitude] );
           resolve( this.userLocation );
         },
-          ( err ) => {
-            Swal.fire( "Error", "No se pudo obtener la geolocalización", "error" );
-            console.log( err );
-            reject();
-          }
+        ( err ) => {
+          Swal.fire( "Error", "No se pudo obtener la geolocalización", "error" );
+          console.log( err );
+          reject();
+        }
       )
 
     } )
 
   }
 
-  getPuntos(){
-    this.http.get<Puntos>( this._baseUrl )
-    .subscribe( ( puntos ) => {
-      this._puntos = puntos.records;
-      this.actualizarPuntos( this._puntos );
-      this.mapService.generarMarkers( this._puntos, this.userLocation! );
-    })
-  }
+  getPuntos( busqueda?: string, field?: string ): Observable<Record[]>{
+    let request = this._baseUrl;
 
-  getPuntosBy( busqueda: string, field: string ) {
-    this.isLoadingPuntos = true;
+    if( busqueda && field ){
+      request = `${this._baseUrl}&refine.${field}=${busqueda}`;
+    } 
 
-    this.http.get<Puntos>(`${this._baseUrl}&refine.${field}=${busqueda}`)
-      .subscribe( ( puntos ) => {
-        this.actualizarPuntos( puntos.records );
-        this.mapService.generarMarkers( this._puntos, this.userLocation! );
-      })
+    return this.http.get<Puntos>( request )
+      .pipe(
+        map(({ records }) => {
+          //this._puntos.next(records);
+          this.actualizarPuntos(records);
+          this.mapService.generarMarkers(records, this.userLocation!);
+          return records;
+        })
+      );
+
   }
 
   getFavPoints() {
     this.isLoadingPuntos = true;
-    this._puntos = [];
+    let points: Record[] = [];
     
     let request: Observable<Puntos>[] = [];
 
@@ -118,18 +115,18 @@ export class MapDataService {
     forkJoin( request )
     .subscribe( responses => {
       responses.forEach( punto => 
-      this._puntos.push( punto.records[0] )
-        )
-
-      this.actualizarPuntos( this._puntos );
-      this.mapService.generarMarkers( this._puntos, this.userLocation! );
+      points.push( punto.records[0] )
+      )
+        console.log("Points:", points)
+        this._puntos.next(points);
+      this.actualizarPuntos( points );
+      this.mapService.generarMarkers( points, this.userLocation! );
     } )
     
   }
 
   actualizarPuntos( puntos: Record[] ) {
     this.mapService.borrarRuta();
-    this._puntos = puntos;
     this.isLoadingPuntos = false;
   }
 
