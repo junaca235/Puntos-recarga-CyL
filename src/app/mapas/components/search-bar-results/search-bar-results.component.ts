@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
 import { MapDataService } from '../../services/mapData.service';
 import { MapService } from '../../services/map.service';
 import { Record } from '../../interface/punto';
@@ -30,14 +30,15 @@ export class SearchBarResultsComponent {
   selectedId: string = "";
   /* isFavourite: boolean = false; */
   puntosFavoritos: string[] | undefined;
+  puntos: Record[] = [];
 
   get isLoadingPuntos() {
     return this.mapDataService.isLoadingPuntos;
   }
 
-  get puntos() {
+  /* get puntos() {
     return this.mapDataService.puntos;
-  }
+  } */
 
   constructor( private mapDataService: MapDataService,
                private mapService: MapService,
@@ -54,9 +55,23 @@ export class SearchBarResultsComponent {
         //this.mapService.selectMarker( data );
       })
 
+      this.puntos = this.mapDataService.puntos;
       this.puntosFavoritos = this.mapDataService.puntosFavoritos;
       //console.log( this.puntosFavoritos )
 
+  }
+
+  ngOnChanges(): void {
+    console.log("ngOncheck ejecutado");
+
+    this.puntos.forEach( punto => {
+      if(this.puntosFavoritos?.find(() => punto.recordid)) {
+        punto.favourite = true;
+      }
+    } )
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
+    
   }
 
   flyTo( punto: Record ){
@@ -90,7 +105,7 @@ export class SearchBarResultsComponent {
     this.authService.changeFavPoint( recordid, punto!.favourite )
       .subscribe( ok => {
         if( ok ) {
-          punto!.favourite = punto!.favourite;
+          punto!.favourite = !punto!.favourite!;
           //TODO: Cambiar el valor favourite del punto elegido
         }
       });

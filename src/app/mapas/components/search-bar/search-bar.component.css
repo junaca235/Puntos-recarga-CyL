@@ -1,13 +1,27 @@
 
-
+.row{
+    max-width: 70vw;
+    margin: 0;
+}
 input, select {
     position: sticky;
     top: 0px;
     z-index: 100;
 }
 input{
-    width: 200px;
+    min-width: 200px;
+    width: 100%;
+    display: inline;
 }
 select{
     width: fit-content;
 }
+button{
+    width: fit-content;
+}
+
+/* @media (orientation: portrait) {
+    .row{
+        flex-direction: column;
+    }
+} */

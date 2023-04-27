@@ -13,6 +13,9 @@ import { MapService } from '../../services/map.service';
       bottom: 25px;
       left: 45vw;
     }
+    .p-sidebar-header .ng-tns-c7-0{
+      background-color: blue;
+    }
   `]
 })
 export class MenuComponent {

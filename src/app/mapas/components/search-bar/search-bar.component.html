@@ -3,11 +3,10 @@
                class="form-control"
                placeholder="Buscar lugar"
                #txtQuery
-               (keyup)="onQueryChanged()"
                #query
                value="GMS DE GUIJUELO SL">
+
         <select class="form-select"
-                (change)="onQueryChanged()"
                 #selectFiltro>
                 <option value=""></option>
                 <option value="favoritos"
@@ -16,5 +15,9 @@
              [value]="filtro.value" >{{ filtro.name }}</option>
         </select>
 
-
+        <button type="button" 
+                    class="btn btn-primary" 
+                    (click)="onQueryChanged()">
+                Ruta
+            </button>
 </div>
