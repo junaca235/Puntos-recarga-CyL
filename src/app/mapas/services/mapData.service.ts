@@ -6,7 +6,6 @@ import { Puntos, Record } from '../interface/punto';
 import { MapService } from './map.service';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { AuthResponse } from 'src/app/auth/interfaces/auth.interface';
 
 import { Observable, Subject, forkJoin, map } from 'rxjs';
 import Swal from 'sweetalert2';
@@ -94,6 +93,7 @@ export class MapDataService {
       .pipe(
         map(({ records }) => {
           //this._puntos.next(records);
+          console.log("Puntos", this._puntos)
           this.actualizarPuntos(records);
           this.mapService.generarMarkers(records, this.userLocation!);
           return records;
@@ -126,6 +126,7 @@ export class MapDataService {
   }
 
   actualizarPuntos( puntos: Record[] ) {
+    this._puntos.next(puntos);
     this.mapService.borrarRuta();
     this.isLoadingPuntos = false;
   }

@@ -28,9 +28,8 @@ export class SearchBarResultsComponent {
 
   @ViewChild("elementLi") elementLi!: ElementRef;
   selectedId: string = "";
-  /* isFavourite: boolean = false; */
   puntosFavoritos: string[] | undefined;
-  puntos!: Record[];
+  puntos: Record[] = [];
 
   get isLoadingPuntos() {
     return this.mapDataService.isLoadingPuntos;
@@ -62,14 +61,23 @@ export class SearchBarResultsComponent {
          } ); */
          //this.mapDataService.getPuntos()
         
-      this.mapDataService.getPuntos()
+        
+      this.puntosFavoritos = this.mapDataService.puntosFavoritos;
+      this.mapDataService.puntos
         .subscribe( puntos => {
           this.puntos = puntos
-          console.log(puntos)
-          this.checkFavourites();
+          if( this.puntosFavoritos ) {
+            this.checkFavourites();
+          }
         } );
-      this.puntosFavoritos = this.mapDataService.puntosFavoritos;
+
       //console.log( this.puntosFavoritos )
+
+  }
+
+  ngOnDestroy(): void {
+    
+
 
   }
 
@@ -106,7 +114,15 @@ export class SearchBarResultsComponent {
         console.log(ok)
         if( ok ) {
           punto!.favourite = !punto!.favourite!;
+          const puntoId = punto!.recordid;
           //TODO: Cambiar el valor favourite del punto elegido
+          if(this.puntosFavoritos?.includes(punto!.recordid)){
+            this.puntosFavoritos = this.puntosFavoritos.filter(punto => punto !== puntoId)
+          } else {
+            this.puntosFavoritos?.push(puntoId)
+          }
+          //this.puntosFavoritos = this.mapDataService.puntosFavoritos;
+          console.log(this.puntosFavoritos)
         }
       });
 

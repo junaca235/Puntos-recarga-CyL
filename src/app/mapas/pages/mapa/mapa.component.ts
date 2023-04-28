@@ -1,11 +1,9 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
 
 import * as mapboxgl from "mapbox-gl"; //Recoge toda la librería y la llama mapboxgl
-import { AuthService } from 'src/app/auth/services/auth.service';
 import { Usuario } from 'src/app/auth/interfaces/auth.interface';
 import { MapDataService } from '../../services/mapData.service';
 import { MapService } from '../../services/map.service';
-import { switchMap, tap } from 'rxjs';
 import { Record } from '../../interface/punto';
 
 @Component({
@@ -33,8 +31,7 @@ export class MapaComponent {
   }
 
   constructor( private mapDataService: MapDataService,
-               private mapService: MapService,
-               private authService: AuthService ) {}
+               private mapService: MapService ) {}
 
 
   ngAfterViewInit(): void {
@@ -47,7 +44,10 @@ export class MapaComponent {
 
       } )
     
-    this.mapDataService.getPuntos().subscribe();
+    this.mapDataService.getPuntos().subscribe( puntos => {
+      this.puntos = puntos
+      console.log(this.puntos)
+    });
 
   }
 

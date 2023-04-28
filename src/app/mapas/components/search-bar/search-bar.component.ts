@@ -1,5 +1,6 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { MapDataService } from '../../services/mapData.service';
+import { Record } from '../../interface/punto';
 
 interface filtro {
   name: string;
@@ -16,10 +17,11 @@ interface filtro {
 })
 export class SearchBarComponent {
 
-  private debounceTimer?: NodeJS.Timeout
+  //private debounceTimer?: NodeJS.Timeout
   @ViewChild("query") query!: ElementRef 
   @ViewChild("selectFiltro") selectFiltro!: ElementRef 
   hasFavPoints: boolean = false; 
+  private puntos: Record[] = []
 
   filtros: filtro[] = [
     {
@@ -44,27 +46,24 @@ export class SearchBarComponent {
 
   }
 
-  onQueryChanged() {
+  searchPoint() {
 
-    if ( this.debounceTimer ) clearTimeout( this.debounceTimer );
+    //if ( this.debounceTimer ) clearTimeout( this.debounceTimer );
     const query = this.query.nativeElement.value.trim();
-    
-    this.debounceTimer = setTimeout( () => {//Espera a q pase un tiempo para realizar la peticion
+    const filtro = this.selectFiltro.nativeElement.value;
+    //this.debounceTimer = setTimeout( () => {//Espera a q pase un tiempo para realizar la peticion
       
-      const filtro = this.selectFiltro.nativeElement.value;
+    if( query === "" ){
+      this.mapDataService.getPuntos().subscribe();
+    } else if( filtro === "favoritos" ) {
+      this.mapDataService.getFavPoints();
+    } else {
+      let p = this.mapDataService.getPuntos( query, filtro ).subscribe();
+    }
 
-      if( query === "" ){
-        this.mapDataService.getPuntos().subscribe();
-      } else if( filtro === "favoritos" ) {
-        this.mapDataService.getFavPoints();
-      } else {
-        //this.mapDataService.getPuntosBy( query, filtro );
-        this.mapDataService.getPuntos( query, filtro ).subscribe();
-      }
-  
-      this.query.nativeElement.value = "";
+    this.query.nativeElement.value = "";
 
-    }, 500 );
+    //}, 500 );
     
     
 
