@@ -3,6 +3,7 @@ import { MapDataService } from '../../services/mapData.service';
 import { MapService } from '../../services/map.service';
 import { Record } from '../../interface/punto';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-search-bar-results',
@@ -30,6 +31,7 @@ export class SearchBarResultsComponent {
   selectedId: string = "";
   puntosFavoritos: string[] | undefined;
   puntos: Record[] = [];
+  userLocation: [number, number] | undefined;
 
   get isLoadingPuntos() {
     return this.mapDataService.isLoadingPuntos;
@@ -50,9 +52,10 @@ export class SearchBarResultsComponent {
         const coord = `${data.lat},${data.lng}`;
         this.selectedId = coord
         //console.log(`${data.lat},${data.lng}`)
-        this.scrollToListItem( coord )
-        //this.mapService.selectMarker( data );
+        this.scrollToListItem( coord );
+        /* this.mapService.selectMarker( data ); */
       })
+    this.userLocation = this.mapDataService.userLocation;
 
       /* this.mapDataService.getPuntos()
         .subscribe( puntos => {
@@ -71,15 +74,8 @@ export class SearchBarResultsComponent {
           }
         } );
 
-      //console.log( this.puntosFavoritos )
-
   }
 
-  ngOnDestroy(): void {
-    
-
-
-  }
 
   flyTo( punto: Record ){
     const coord = punto.fields.dd.join(",");

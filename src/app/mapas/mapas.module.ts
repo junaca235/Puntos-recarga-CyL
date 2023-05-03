@@ -30,6 +30,9 @@ import { InfoRutaComponent } from './components/info-ruta/info-ruta.component';
     CommonModule,
     MapasRoutingModule,
     PrimeNgModule
+  ], 
+  exports: [
+    LnglatPipe
   ]
 })
 export class MapasModule { }

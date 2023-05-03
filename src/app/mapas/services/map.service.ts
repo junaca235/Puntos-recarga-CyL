@@ -4,6 +4,7 @@ import { Record} from '../interface/punto';
 import { DirectionsApiClient } from '../api';
 import { DirectionsResponse, Route } from '../interface/direction';
 import { Observable, Observer, Subject } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -52,9 +53,10 @@ export class MapService {
   flyTo( coords: LngLatLike ) {
     
     if ( !this.isMapReady)  throw Error("El mapa no está inicializado");
-
+console.log(coords)
     if( !this.markers.find( m => m.setLngLat( coords ) ) ){
       console.log(" Marcador no encontrado ")
+      Swal.fire( "Error", "Marcador no encontrado", "error" );
     }
     //console.log( this.markers )
 
@@ -116,7 +118,7 @@ export class MapService {
     } )
 
     this.map.fitBounds( this.bounds, {
-      padding: 20
+      padding: 50
     } )
 
   }
@@ -220,15 +222,16 @@ export class MapService {
   }
 
   clickPopup( data: LngLat ) {
-    if( data.toArray() === this.userLocation ) return
-    console.log(this.userLocation)
+    /* const lnglat = [data.lat, data.lng] */
+    if( data.toArray() == this.userLocation ){ return } 
+    console.log(this.userLocation, data)
     this.popupData.next( data )
     this.flyTo( data );
   }
 
-  selectMarker( coords: LngLat ): LngLat {
+  /* selectMarker( coords: LngLat ): LngLat {
     return coords
-  }
+  } */
 
 
 }

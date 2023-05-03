@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { OrderListModule } from 'primeng/orderlist';
 import { SidebarModule } from 'primeng/sidebar';
+import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
-
 
 
 @NgModule({
@@ -12,7 +12,8 @@ import { ToolbarModule } from 'primeng/toolbar';
     ButtonModule,
     OrderListModule,
     SidebarModule,
-    ToolbarModule,
+    ToastModule,
+    ToolbarModule
   ]
 })
 export class PrimeNgModule { }

@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { MapDataService } from '../../services/mapData.service';
 import { Record } from '../../interface/punto';
+import { MessageService } from 'primeng/api';
 
 interface filtro {
   name: string;
@@ -11,9 +12,7 @@ interface filtro {
   selector: 'app-search-bar',
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.css'],
-  styles: [`
-    
-  `]
+  providers: [ MessageService ]
 })
 export class SearchBarComponent {
 
@@ -30,7 +29,7 @@ export class SearchBarComponent {
     },
     {
       name: "tipo",
-      value: "type"
+      value: "tipo"
     },
     {
       name: "operador",
@@ -38,12 +37,13 @@ export class SearchBarComponent {
     },
   ]
 
-  constructor( private mapDataService: MapDataService ) {}
+  constructor( private mapDataService: MapDataService, 
+               private messageService: MessageService ) {}
 
   ngOnInit(): void {
     
     this.hasFavPoints = this.mapDataService.usuario?.recordid? true : false;
-
+    
   }
 
   searchPoint() {
@@ -52,20 +52,21 @@ export class SearchBarComponent {
     const query = this.query.nativeElement.value.trim();
     const filtro = this.selectFiltro.nativeElement.value;
     //this.debounceTimer = setTimeout( () => {//Espera a q pase un tiempo para realizar la peticion
-      
-    if( query === "" ){
-      this.mapDataService.getPuntos().subscribe();
-    } else if( filtro === "favoritos" ) {
-      this.mapDataService.getFavPoints();
-    } else {
-      let p = this.mapDataService.getPuntos( query, filtro ).subscribe();
-    }
+      try {
+        if( query === "" ){
+          this.mapDataService.getPuntos().subscribe();
+        } else if( filtro === "favoritos" ) {
+          this.mapDataService.getFavPoints();
+        } else {
+           this.mapDataService.getPuntos( query, filtro ).subscribe();
+        }
+      } catch (error) {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se encontraron puntos' })
+      }
+    
 
     this.query.nativeElement.value = "";
-
     //}, 500 );
-    
-    
 
   }
 

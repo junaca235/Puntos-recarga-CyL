@@ -7,7 +7,7 @@ import { MapService } from './map.service';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/auth/services/auth.service';
 
-import { Observable, Subject, forkJoin, map } from 'rxjs';
+import { Observable, Subject, forkJoin, map, BehaviorSubject, throwError, catchError } from 'rxjs';
 import Swal from 'sweetalert2';
 
 @Injectable({
@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 export class MapDataService {
 
   private _baseUrl: string = environment.jcylUrl;
-  private _puntos = new Subject<Record[]>();
+  private _puntos = new BehaviorSubject<Record[]>([]);
   private _favPoints: string[] | undefined;
 
   isLoadingPuntos: boolean = false;
@@ -94,6 +94,7 @@ export class MapDataService {
         map(({ records }) => {
           //this._puntos.next(records);
           console.log("Puntos", this._puntos)
+          if(records.length <= 0) throw new Error("Puntos no encontrados")
           this.actualizarPuntos(records);
           this.mapService.generarMarkers(records, this.userLocation!);
           return records;

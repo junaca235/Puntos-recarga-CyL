@@ -46,7 +46,6 @@ export class MapaComponent {
     
     this.mapDataService.getPuntos().subscribe( puntos => {
       this.puntos = puntos
-      console.log(this.puntos)
     });
 
   }
