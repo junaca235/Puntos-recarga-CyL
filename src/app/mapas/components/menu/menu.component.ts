@@ -21,9 +21,7 @@ import { MapService } from '../../services/map.service';
 export class MenuComponent {
 
   sidebarVisible: boolean = false;
-  //puntos!: Punto;
-  /* @Input()mapa!: mapboxgl.Map;
-  @Input()puntos!: Record[]; */
+
 
   constructor(private mapService: MapService) {}
 
@@ -36,14 +34,5 @@ export class MenuComponent {
       })
 
   }
-
-  /* irMarcador( lat: number, lng: number ) {
-    console.log("Volando voy: ", lat, lng)
-
-    this.mapa.flyTo({
-      center:  [lat, lng],
-      essential: true
-    })
-  } */
 
 }

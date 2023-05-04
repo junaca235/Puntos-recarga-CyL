@@ -12,11 +12,11 @@ import Swal from 'sweetalert2';
 export class MapService {
 
   mapa$!: Observable<Map>;
-  private map? : Map;
+  map? : Map;
   private markers: Marker[] = [];
   private bounds: LngLatBounds = new LngLatBounds();
   private ruta: Route | undefined;
-  private center: [number, number] = [-4.723, 41.6551800];
+  private center: [number, number] = [-4.735524, 41.648903];
   private popupData = new Subject<LngLat>();
   private userLocation?: [number, number];
 
@@ -35,6 +35,7 @@ export class MapService {
   get popupInfo() {
     return this.popupData.asObservable();
   }
+  
 
 
   constructor( private dac: DirectionsApiClient ) {
@@ -53,7 +54,7 @@ export class MapService {
   flyTo( coords: LngLatLike ) {
     
     if ( !this.isMapReady)  throw Error("El mapa no está inicializado");
-console.log(coords)
+
     if( !this.markers.find( m => m.setLngLat( coords ) ) ){
       console.log(" Marcador no encontrado ")
       Swal.fire( "Error", "Marcador no encontrado", "error" );
@@ -87,7 +88,7 @@ console.log(coords)
     })
   }
 
-  generarMarkers( puntos: Record[], userLocation: [number, number]) {
+  generarMarkers( puntos: Record[], userLocation: [number, number] |null = null) {
 
     this.markers.forEach( marker => marker.remove() );
     const newMarkers: Marker[] = [];
@@ -105,13 +106,18 @@ console.log(coords)
       
     })
 
-    newMarker = this.createNewMarker( userLocation, "green" )
-        .addTo(this.map!);
-
+    
     this.markers = newMarkers;
 
     this.bounds = new LngLatBounds();
-    this.bounds.extend( userLocation )
+
+    if( userLocation) {
+      newMarker = this.createNewMarker( userLocation, "green" )
+      .addTo(this.map!);
+
+      this.bounds.extend( userLocation )
+    } 
+    
 
     this.markers.forEach( marker => {
       this.bounds.extend( marker.getLngLat() )
