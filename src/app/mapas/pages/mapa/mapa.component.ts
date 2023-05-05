@@ -1,11 +1,9 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
 
 import * as mapboxgl from "mapbox-gl"; //Recoge toda la librería y la llama mapboxgl
-import { AuthService } from 'src/app/auth/services/auth.service';
 import { Usuario } from 'src/app/auth/interfaces/auth.interface';
 import { MapDataService } from '../../services/mapData.service';
 import { MapService } from '../../services/map.service';
-import { switchMap, tap } from 'rxjs';
 import { Record } from '../../interface/punto';
 
 @Component({
@@ -23,6 +21,7 @@ export class MapaComponent {
   private mapa!: mapboxgl.Map;
   private puntos: Record[] = [];
   private _usuario!: Usuario;
+  userLocation: [number, number] | undefined;
 
   get usuario() {
     return this._usuario;
@@ -33,29 +32,26 @@ export class MapaComponent {
   }
 
   constructor( private mapDataService: MapDataService,
-               private mapService: MapService,
-               private authService: AuthService ) {}
+               private mapService: MapService ) {}
 
+    ngOnInit(): void {
+      //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+      //Add 'implements OnInit' to the class.
+      this.userLocation = this.mapDataService.userLocation;
+    }
 
   ngAfterViewInit(): void {
 
     this.mapService.mapa$
-      .pipe(
-        switchMap( () => {
-          return this.mapDataService.getPuntos()
-        }),
-        tap(        
-        )
-      )
-      .subscribe(( puntos ) => {
+      .subscribe( () => {
+        this.mapDataService.getPuntos();
+        this.userLocation = this.mapDataService.userLocation;
+        this.mapService.mapa?.setCenter( this.userLocation || this.mapService.mapa.getCenter() );
 
-        this.puntos = puntos.records;
-      
-          const userLocation = this.mapDataService.userLocation;
-
-            this.mapService.generarMarkers( this.puntos, userLocation! )
-
-            this.mapService.mapa?.setCenter( userLocation || this.mapService.mapa.getCenter() );
+      } )
+    
+    this.mapDataService.getPuntos().subscribe( puntos => {
+      this.puntos = puntos
     });
 
   }

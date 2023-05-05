@@ -10,11 +10,12 @@ import { AuthResponse, Usuario } from '../interfaces/auth.interface';
 export class AuthService {
 
   private _baseUrl = environment.mongoUrl;
-  usuario = new Subject<AuthResponse>();
+  //private _usuario = new Subject<AuthResponse>();
+  private user!: AuthResponse;
 
-  /* get usuario() {
-    return {...this._usuario.asObservable()}
-  } */
+  get usuario() {
+    return this.user;
+  }
 
   constructor( private http: HttpClient ) { }
 
@@ -29,11 +30,8 @@ export class AuthService {
           if( resp.ok ) {
             
             localStorage.setItem("token", resp.token!);
-            this.usuario.next( resp );/* {
-              name: resp.name!,
-              uid: resp.uid!,
-            } */
-
+            //this._usuario.next( resp );
+            this.user = resp;
           }
         } ),
         map( resp => resp.ok ),
@@ -70,7 +68,7 @@ export class AuthService {
    */
   validarToken(): Observable<AuthResponse | boolean> {
 
-    const url = `${this._baseUrl}/auth/renew`;
+    const url = `${ this._baseUrl }/auth/newPunto`;
     const headers = new HttpHeaders()
       .set("x-token", localStorage.getItem("token") || "");
 
@@ -85,21 +83,26 @@ export class AuthService {
 
   }
 
-  /* buscarPuntos( name: string ): Observable<AuthResponse | boolean> {
+  changeFavPoint( recordid: string, isfavourite: boolean ) {
 
-    const url = `${ this._baseUrl }/searchPuntos`;
-    const body = { name };
+    let url = `${ this._baseUrl }/auth/`;
 
-    return this.http.post<AuthResponse>( url, body )
-      .pipe(
-        tap( ( usuario ) => {
-          if( usuario.ok ) {
-            return 
-          }
-        } ),
-        map( resp => resp.ok ),
-        catchError( err => of(err.error.msg))
-      )
+    if( isfavourite ) url += "deletePunto";
+    else url += "newPunto";
 
-  } */
+    const body = { name: this.user.name, recordid}
+
+    return this.http.post<AuthResponse>(url, body)
+    .pipe(
+      //tap(resp => resp.ok),
+      map(resp => {
+        return resp.ok;
+      }),
+      catchError(err => {
+        console.error(err);
+        return of(false);
+      })
+    );
+  }
+
 }

@@ -13,14 +13,15 @@ import { MapService } from '../../services/map.service';
       bottom: 25px;
       left: 45vw;
     }
+    .p-sidebar-header .ng-tns-c7-0{
+      background-color: blue;
+    }
   `]
 })
 export class MenuComponent {
 
   sidebarVisible: boolean = false;
-  //puntos!: Punto;
-  /* @Input()mapa!: mapboxgl.Map;
-  @Input()puntos!: Record[]; */
+
 
   constructor(private mapService: MapService) {}
 
@@ -33,14 +34,5 @@ export class MenuComponent {
       })
 
   }
-
-  /* irMarcador( lat: number, lng: number ) {
-    console.log("Volando voy: ", lat, lng)
-
-    this.mapa.flyTo({
-      center:  [lat, lng],
-      essential: true
-    })
-  } */
 
 }

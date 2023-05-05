@@ -4,7 +4,7 @@ import { Record} from '../interface/punto';
 import { DirectionsApiClient } from '../api';
 import { DirectionsResponse, Route } from '../interface/direction';
 import { Observable, Observer, Subject } from 'rxjs';
-import { MapDataService } from './mapData.service';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +12,11 @@ import { MapDataService } from './mapData.service';
 export class MapService {
 
   mapa$!: Observable<Map>;
-  private map? : Map;
+  map? : Map;
   private markers: Marker[] = [];
   private bounds: LngLatBounds = new LngLatBounds();
   private ruta: Route | undefined;
-  private center: [number, number] = [-4.723, 41.6551800];
+  private center: [number, number] = [-4.735524, 41.648903];
   private popupData = new Subject<LngLat>();
   private userLocation?: [number, number];
 
@@ -35,9 +35,10 @@ export class MapService {
   get popupInfo() {
     return this.popupData.asObservable();
   }
+  
 
 
-  constructor( private dac: DirectionsApiClient) {
+  constructor( private dac: DirectionsApiClient ) {
     this.createMap();
   }
 
@@ -56,6 +57,7 @@ export class MapService {
 
     if( !this.markers.find( m => m.setLngLat( coords ) ) ){
       console.log(" Marcador no encontrado ")
+      Swal.fire( "Error", "Marcador no encontrado", "error" );
     }
     //console.log( this.markers )
 
@@ -82,10 +84,11 @@ export class MapService {
         observer.next( this.map! );
         observer.complete;
       })
+      
     })
   }
 
-  generarMarkers( puntos: Record[], userLocation: [number, number]) {
+  generarMarkers( puntos: Record[], userLocation: [number, number] |null = null) {
 
     this.markers.forEach( marker => marker.remove() );
     const newMarkers: Marker[] = [];
@@ -103,26 +106,25 @@ export class MapService {
       
     })
 
-    newMarker = this.createNewMarker( userLocation, "green" )
-        .addTo(this.map!);
-
-    /* newMarker.getElement().addEventListener("click", (event) => {
-      //TODO: Pulsar el marcador
-      console.log(event.target)
-    }) */
-
-
+    
     this.markers = newMarkers;
 
     this.bounds = new LngLatBounds();
-    this.bounds.extend( userLocation )
+
+    if( userLocation) {
+      newMarker = this.createNewMarker( userLocation, "green" )
+      .addTo(this.map!);
+
+      this.bounds.extend( userLocation )
+    } 
+    
 
     this.markers.forEach( marker => {
       this.bounds.extend( marker.getLngLat() )
     } )
 
     this.map.fitBounds( this.bounds, {
-      padding: 20
+      padding: 50
     } )
 
   }
@@ -147,7 +149,6 @@ export class MapService {
       } );
 
   }
-  //TODO: resetear la lista
 
   private drawPolyLine( route: Route ) {
     console.log( { km: route.distance / 1000 } );
@@ -222,21 +223,21 @@ export class MapService {
     })
     .setLngLat( lnglat )
     .setPopup( popup );
-    //console.log( newMarker.getElement() ) 
     
     return newMarker;
   }
 
   clickPopup( data: LngLat ) {
-    if( data.toArray() === this.userLocation ) return
-    console.log(this.userLocation)
+    /* const lnglat = [data.lat, data.lng] */
+    if( data.toArray() == this.userLocation ){ return } 
+    console.log(this.userLocation, data)
     this.popupData.next( data )
     this.flyTo( data );
   }
 
-  selectMarker( coords: LngLat ): LngLat {
+  /* selectMarker( coords: LngLat ): LngLat {
     return coords
-  }
+  } */
 
 
 }

@@ -3,11 +3,10 @@
                class="form-control"
                placeholder="Buscar lugar"
                #txtQuery
-               (keyup)="onQueryChanged()"
                #query
                value="GMS DE GUIJUELO SL">
+
         <select class="form-select"
-                (change)="onQueryChanged()"
                 #selectFiltro>
                 <option value=""></option>
                 <option value="favoritos"
@@ -15,8 +14,10 @@
             <option *ngFor="let filtro of filtros"
              [value]="filtro.value" >{{ filtro.name }}</option>
         </select>
-    
 
-    <app-search-bar-results></app-search-bar-results>
-
+        <button type="button" 
+                    class="btn btn-primary" 
+                    (click)="searchPoint()">
+                Buscar
+            </button>
 </div>

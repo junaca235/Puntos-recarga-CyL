@@ -2,9 +2,15 @@
 <p-sidebar  [(visible)]="sidebarVisible" 
             position="bottom" 
             styleClass="p-sidebar-lg" 
-            id="menu"><!-- [style]="{ 'height': '60vh' }" -->
+            id="menu">
 
-    <app-search-bar></app-search-bar>
+    <ng-template pTemplate="header">
+        <app-search-bar></app-search-bar>
+    </ng-template>
+    <ng-template pTemplate="body">
+        <app-search-bar-results></app-search-bar-results>
+    </ng-template>
+    
 
 </p-sidebar>
 <p-button (click)="sidebarVisible = true" 

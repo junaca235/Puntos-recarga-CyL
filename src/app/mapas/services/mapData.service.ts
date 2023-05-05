@@ -1,16 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-
-import { Observable, combineLatest, switchMap } from 'rxjs';
 import { Puntos, Record } from '../interface/punto';
-import Swal from 'sweetalert2';
 import { MapService } from './map.service';
-import { DirectionsResponse } from '../interface/direction';
-import { DirectionsApiClient } from '../api';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { AuthResponse } from 'src/app/auth/interfaces/auth.interface';
+
+import { Observable, forkJoin, map, BehaviorSubject, catchError } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -18,125 +15,119 @@ import { AuthResponse } from 'src/app/auth/interfaces/auth.interface';
 export class MapDataService {
 
   private _baseUrl: string = environment.jcylUrl;
-  private _puntos!: Record[];
-  private _usuario: AuthResponse | undefined;
-  private _favPoints: string[] | undefined;
+  private _puntos = new BehaviorSubject<Record[]>([]);
+  //private _favPoints: string[] | undefined;
 
   isLoadingPuntos: boolean = false;
 
-  userLocation?: [number, number];
+  private _userLocation: [number, number] | undefined;
   datosCargados: boolean = false;
 
-  get isUserLocationReady(): boolean {
-    return !!this.userLocation;
+  get userLocation() {
+    return this._userLocation;
   }
 
   get puntos(){
-    return this._puntos;
+    return this._puntos.asObservable();
   }
 
   get usuario() {
-    return this._usuario;
+    return this.authService.usuario;
   }
 
-  get favPoints() {
+  /* get favPoints() {
     return this._favPoints;
-  }
+  } */
 
   get puntosFavoritos() {
-    return this._usuario?.recordid;
+    return this.authService.usuario?.recordid;
   }
 
   constructor( private http: HttpClient,
                private mapService: MapService,
-               private authService: AuthService,
-               private dac: DirectionsApiClient ) { 
+               private authService: AuthService ) { 
 
     this.getUserLocation();
 
-    this.getPuntos().subscribe( ( puntos ) => {
-      this._puntos = puntos.records;
-    } );
-
-    this.authService.usuario
-      .subscribe( usuario => {
-        this._usuario = usuario;
-        this._favPoints = usuario.recordid ;
-      } );
-
   }
 
-  async getUserLocation(): Promise<[number, number]> {
+  async getUserLocation() {
 
-    return new Promise( ( resolve, reject ) => {
-
-      navigator.geolocation.getCurrentPosition(
-        ({ coords }) => {
-          this.userLocation = [coords.longitude, coords.latitude];
-          /* console.log( coords ) */
-          this.mapService.setUserLocation( [coords.latitude, coords.longitude] );
-          resolve( this.userLocation );
-        },
-          ( err ) => {
-            Swal.fire( "Error", "No se pudo obtener la geolocalización", "error" );
-            console.log( err );
-            reject();
-          }
-      )
-
-    } )
-
-  }
-
-  getPuntos(): Observable<Puntos>{
-    return this.http.get<Puntos>( this._baseUrl );
-  }
-
-  getPuntosBy( busqueda: string, field: string ) {
-    this.isLoadingPuntos = true;
-
-    this.http.get<Puntos>(`${this._baseUrl}&refine.${field}=${busqueda}`)
-      .subscribe( ( puntos ) => {
-        this.actualizarPuntos( puntos.records );
-        this.mapService.generarMarkers( this._puntos, this.userLocation! );
-      })
-  }
-
-    getFavPoints() {
-      this.isLoadingPuntos = true;
-      this._puntos = [];
-
-      this._favPoints?.forEach( id => {
-        this.http.get<Puntos>(`${this._baseUrl}&refine.recordid=${ id }`)
-          .subscribe( punto => {
-            this._puntos.push( punto.records[0] );
-          } )
-      })
-      
-      this.actualizarPuntos( this._puntos );
-      
-      this.mapService.generarMarkers( this._puntos, this.userLocation! );
-      /* .subscribe( ( puntos ) => {
-          this.actualizarPuntos( puntos.records );
-          this.mapService.generarMarkers( this._puntos, this.userLocation! );
-        }) */
+    while (!this.userLocation) {
+        await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(
+                ({ coords }) => {
+                    this._userLocation = [coords.longitude, coords.latitude] ;
+                    this.mapService.setUserLocation([coords.latitude, coords.longitude]);
+                    this.mapService.createNewMarker( this._userLocation, "green" )
+                      .addTo(this.mapService.map!)
+                    resolve(true);
+                },
+                (err) => {
+                    Swal.fire("Error", "No se pudo obtener la geolocalización", "error");
+                    console.log(err);
+                    reject();
+                }
+            )
+        });
     }
 
-  /* usuarioLogeado() {
+    return this.userLocation;
+  }
 
-    this.authService.validarToken()
-      .subscribe( resp => {
-        console.log( resp )
-      })
-  } */
 
-  /* getDirectionRoute(start: [number, number], end: [number, number]) {
-    return this.dac.get<DirectionsResponse>(`/${ start.join("%2C") }%3B${ end.join("%2C") }`);
-  } */
+  getPuntos( busqueda?: string, field?: string ): Observable<Record[]>{
+    let request = this._baseUrl;
+
+    if( busqueda && field ){
+      request = `${this._baseUrl}&refine.${field}=${busqueda}`;
+    } 
+
+    return this.http.get<Puntos>( request )
+      .pipe(
+        map(({ records }) => {
+
+          if(records.length <= 0) throw new Error("Puntos no encontrados")
+          this.actualizarPuntos(records);
+          this.mapService.generarMarkers(records, this.userLocation);
+          return records;
+          
+        }),
+        catchError((error) => {
+          console.log('Error:', error);
+
+          return [];
+        })
+      );
+
+  }
+
+  getFavPoints() {
+    this.isLoadingPuntos = true;
+    let points: Record[] = [];
+    
+    let request: Observable<Puntos>[] = [];
+
+    this.puntosFavoritos?.forEach( id => {
+      request.push( this.http.get<Puntos>(`${this._baseUrl}&refine.recordid=${ id }`) )
+    })
+
+    forkJoin( request )
+    .subscribe( responses => {
+      responses.forEach( punto => 
+      points.push( punto.records[0] )
+      )
+        console.log("Points:", points)
+        this._puntos.next(points);
+      this.actualizarPuntos( points );
+      this.mapService.generarMarkers( points, this.userLocation );
+    } )
+    
+  }
 
   actualizarPuntos( puntos: Record[] ) {
+    this._puntos.next(puntos);
     this.mapService.borrarRuta();
-    this._puntos = puntos;
     this.isLoadingPuntos = false;
   }
 

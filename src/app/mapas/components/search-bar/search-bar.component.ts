@@ -1,5 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { MapDataService } from '../../services/mapData.service';
+import { Record } from '../../interface/punto';
+import { MessageService } from 'primeng/api';
 
 interface filtro {
   name: string;
@@ -9,17 +11,16 @@ interface filtro {
 @Component({
   selector: 'app-search-bar',
   templateUrl: './search-bar.component.html',
-  styleUrls: ['./search-bar.component.css'],
-  styles: [`
-    
-  `]
+  styleUrls: ['./search-bar.component.css']
 })
 export class SearchBarComponent {
 
-  private debounceTimer?: NodeJS.Timeout
+  //private debounceTimer?: NodeJS.Timeout
   @ViewChild("query") query!: ElementRef 
   @ViewChild("selectFiltro") selectFiltro!: ElementRef 
   hasFavPoints: boolean = false; 
+  private puntos: Record[] = []
+
 
   filtros: filtro[] = [
     {
@@ -28,7 +29,7 @@ export class SearchBarComponent {
     },
     {
       name: "tipo",
-      value: "type"
+      value: "tipo"
     },
     {
       name: "operador",
@@ -41,29 +42,23 @@ export class SearchBarComponent {
   ngOnInit(): void {
     
     this.hasFavPoints = this.mapDataService.usuario?.recordid? true : false;
-
+    
   }
 
-  onQueryChanged() {
+  searchPoint() {
 
-    if ( this.debounceTimer ) clearTimeout( this.debounceTimer );
     const query = this.query.nativeElement.value.trim();
+    const filtro = this.selectFiltro.nativeElement.value;
     
-    this.debounceTimer = setTimeout( () => {//Espera a q pase un tiempo para realizar la peticion
-      
-      const filtro = this.selectFiltro.nativeElement.value;
-
-      if( filtro === "favoritos" ) {
-        this.mapDataService.getFavPoints();
-      } else {
-        this.mapDataService.getPuntosBy( query, filtro );
-      }
-  
-      
-
-    }, 500 );
+    if( filtro === "favoritos" ) {
+      this.mapDataService.getFavPoints();
+    } else if( query === "" ){
+      this.mapDataService.getPuntos().subscribe();
+    } else {
+        this.mapDataService.getPuntos( query, filtro ).subscribe();
+    }
     
-    
+    this.query.nativeElement.value = "";
 
   }
 
