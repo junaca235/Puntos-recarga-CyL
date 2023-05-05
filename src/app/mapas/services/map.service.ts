@@ -62,8 +62,9 @@ export class MapService {
     //console.log( this.markers )
 
     this.map?.flyTo( {
-      center: coords
-    } )
+      center: coords,
+      zoom: 13
+    } );
 
   }
 

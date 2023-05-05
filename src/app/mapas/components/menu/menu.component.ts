@@ -1,21 +1,13 @@
-import { Component, Input } from '@angular/core';
-import {  Record } from '../../interface/punto';
-import * as mapboxgl from 'mapbox-gl';
+import { Component } from '@angular/core';
+
 import { MapService } from '../../services/map.service';
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
+  styleUrls: ["./menu.component.css"],
   styles: [`
-    #menuButton{
-      margin: auto;
-      position: absolute;
-      bottom: 25px;
-      left: 45vw;
-    }
-    .p-sidebar-header .ng-tns-c7-0{
-      background-color: blue;
-    }
+
   `]
 })
 export class MenuComponent {

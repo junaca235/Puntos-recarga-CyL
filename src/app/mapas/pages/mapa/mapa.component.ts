@@ -44,15 +44,17 @@ export class MapaComponent {
 
     this.mapService.mapa$
       .subscribe( () => {
-        this.mapDataService.getPuntos();
+        this.mapDataService.getPuntos().subscribe( puntos => {
+          this.puntos = puntos
+        });;
         this.userLocation = this.mapDataService.userLocation;
         this.mapService.mapa?.setCenter( this.userLocation || this.mapService.mapa.getCenter() );
 
       } )
     
-    this.mapDataService.getPuntos().subscribe( puntos => {
+    /* this.mapDataService.getPuntos().subscribe( puntos => {
       this.puntos = puntos
-    });
+    }); */
 
   }
 

@@ -23,6 +23,13 @@
                 <div class="flex flex-column align-items-end">
                     <h6 class="mb-2"> Nº conectores: {{ punto.fields.no }} </h6>
                 </div>
+                <div class="flex flex-column align-items-end">
+                    <h6 class="mb-2">
+                        <i class="pi pi-map-marker vertical-align-middle mr-2" 
+                        style="font-size: 1rem"></i>
+                        <span class="vertical-align-middle line-height-1">{{ punto.fields.dd }} </span>                  
+                    </h6>
+                </div>
                 <button *ngIf="userLocation"
                         type="button" 
                         class="btn btn-secondary" 
