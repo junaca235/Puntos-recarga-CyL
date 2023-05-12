@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { crearUsuario, loginUsuario, revalidarToken, buscarPuntos, guardarPunto, eliminarPunto } = require("../controllers/auth.controller");
+const { crearUsuario, loginUsuario, buscarPuntos, guardarPunto, eliminarPunto, validarToken } = require("../controllers/auth.controller");
 const { check } = require("express-validator");
 const { validarCampos } = require("../middlewares/validar-campos");
 const { validarJWT } = require("../middlewares/validar-jwt");
@@ -20,7 +20,7 @@ router.post( "/",  [
 ], loginUsuario )
 
 //Validar y revalidar token
-router.get( "/renew", validarJWT, revalidarToken )
+router.get( "/renew", validarJWT, validarToken )
 
 //Buscar puntos
 router.post( "/searchPuntos",  [
@@ -38,6 +38,11 @@ router.post( "/deletePunto",  [
     check("user", "Nombre de usuario obligatorio"),
     check("recordid", "Id del punto obligatorio")
 ], eliminarPunto );
+
+//Revalidar token
+/* router.post( "/validarToken",  [
+    check("token", "Token del usuario obligatorio")
+], revalidarToken ); */
 
 
 module.exports = router

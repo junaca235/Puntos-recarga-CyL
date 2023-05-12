@@ -31,6 +31,8 @@ const crearUsuario = async ( req, res ) => {
         //Generar el JWT
         const token = await generarJWT( dbUser.id, name );
 
+        dbUser.token = token;
+
         //Crear usuario de BD
         await dbUser.save();
 
@@ -79,15 +81,16 @@ const loginUsuario = async ( req, res ) => {
         }
 
         //Generar JWT
-        const token = await generarJWT( dbUser.id, dbUser.name );
+        //const token = await generarJWT( dbUser.id, dbUser.name );
 
         //Respuesta
         return res.json({
             ok: true,
             uid: dbUser.uid,
             name: dbUser.name,
+            password: dbUser.password,
             recordid: dbUser.recordid,
-            token: token
+            token: dbUser.token
         })
         
     } catch (error) {
@@ -98,29 +101,30 @@ const loginUsuario = async ( req, res ) => {
     }
 } 
 
-const revalidarToken = async ( req, res ) => {
+const validarToken = async ( req, res ) => {
 
-    const { uid, name } = req.body;
-    const token = req.header("x-token");
-    const newToken = await generarJWT( uid, name );
+    //const { token } = req.body;
+    const token = req.header("token");
+    let dbUser = await Usuario.findOne({ token })
+    //const newToken = await generarJWT( uid, name );
 
-    if( !token ) {
+    if( !dbUser ) {
         return res.json({
             ok: false,
-            msg: "Token no válido"
+            msg: "Token no encontrado"
         })
     }
 
     return res.json({
         ok: true,
-        uid,
-        name,
-        token: newToken
+        uid: dbUser.uid,
+        name: dbUser.name,
+        recordid: dbUser.recordid,
+        token: dbUser.token
+
     })
 }
 
-
-//TODO: completar buscarPuntos
 const buscarPuntos = async ( req, res ) => {
 
     const { name, recordid } = req.body;
@@ -229,7 +233,7 @@ const eliminarPunto = async ( req, res ) => {
 module.exports = {
     crearUsuario,
     loginUsuario,
-    revalidarToken,
+    validarToken,
     buscarPuntos,
     guardarPunto,
     eliminarPunto
