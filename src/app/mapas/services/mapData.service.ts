@@ -16,7 +16,6 @@ export class MapDataService {
 
   private _baseUrl: string = environment.jcylUrl;
   private _puntos = new BehaviorSubject<Record[]>([]);
-  //private _favPoints: string[] | undefined;
 
   isLoadingPuntos: boolean = false;
 
@@ -35,10 +34,6 @@ export class MapDataService {
     return this.authService.usuario;
   }
 
-  /* get favPoints() {
-    return this._favPoints;
-  } */
-
   get puntosFavoritos() {
     return this.authService.usuario?.recordid;
   }
@@ -51,6 +46,16 @@ export class MapDataService {
 
   }
 
+  /**
+   * Recoge las coordenadas del usuario
+   * 
+   * Método que espera al permiso de acceso de ubucación del navegador.
+   * Si se acepta el permiso se recogen las coordenadas y se genera
+   * un marcador con la ubicación del usuario.
+   * Si no se acepta muestra un mensaje de error.
+   * 
+   * return 
+   */
   async getUserLocation() {
 
     while (!this.userLocation) {
@@ -72,7 +77,7 @@ export class MapDataService {
         });
     }
 
-    return this.userLocation;
+    //return this.userLocation;
   }
 
 
@@ -90,6 +95,8 @@ export class MapDataService {
           if(records.length <= 0) throw new Error("Puntos no encontrados")
           this.actualizarPuntos(records);
           this.mapService.generarMarkers(records, this.userLocation);
+
+          this.mapService.resetRoute();
           return records;
           
         }),

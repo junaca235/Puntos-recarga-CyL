@@ -1,0 +1,39 @@
+:host ::ng-deep .p-button.p-element{
+    margin: auto;
+    position: absolute;
+    top: 100px;
+    left: 0px;/* TODO: centrar mejor */
+    padding: 20px 0px;
+    border-radius: 0px 10px 10px 0px;
+    background-color: lightgreen;
+    border-color: lightgreen;
+    z-index: 999;
+}
+:host ::ng-deep .p-button.p-element span {
+    display: inline-block;
+    transform: rotate(90deg);
+    white-space: nowrap;
+} 
+:host ::ng-deep .p-sidebar{
+    top: 100px;
+    min-width: 40vw;
+    max-height: 50vh;
+    min-height: 20vh;
+    transition: height 0.5s ease-in-out;
+    border-radius: 0px 10px 10px 0px;
+}
+:host ::ng-deep .p-sidebar-header{
+    /* justify-content: space-between; */
+    padding: 5px 20px;
+}
+:host ::ng-deep .p-sidebar-footer{
+    padding: 0px;
+}
+/* h6{
+    margin-top: 8px;
+    margin-bottom: 0px;
+} */
+/* :host ::ng-deep .p-sidebar-header>.p-ripple{
+    margin: 0px;
+    flex-shrink: 0;
+} */

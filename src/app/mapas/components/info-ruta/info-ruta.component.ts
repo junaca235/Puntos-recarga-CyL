@@ -26,7 +26,7 @@ export class InfoRutaComponent {
   constructor( private mapService: MapService ) {}
 
   ngOnInit(): void {
-    this.infoRuta = this.mapService.route;
+    //this.infoRuta = this.mapService.route;
     this.distancia = this.infoRuta!.distance
   }
 

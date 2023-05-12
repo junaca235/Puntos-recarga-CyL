@@ -1,0 +1,24 @@
+<p-sidebar [(visible)]="sidebarVisible" 
+           class="sidebar">
+    <!-- <ng-template pTemplate="header"
+           id="header">
+        {{ ruta.distance}} km
+    </ng-template> -->
+    <ng-template pTemplate="body">
+        <!-- <ul> -->
+            <h6>{{ ruta.distance | distance | number }} km | {{ ruta.duration | time }} </h6>
+            <ol>
+                <li *ngFor="let step of ruta.legs[0].steps">
+                    {{ step.maneuver.instruction }}
+                </li>
+                <!-- <label>{{ step.distance }}</label> -->
+            </ol>
+        <!-- </ul> -->
+        
+    </ng-template>
+</p-sidebar>
+<p-button (click)="sidebarVisible = true" 
+label="Ruta"
+          class="menuButton vertical-text">
+    <!-- <label class="vertical-text">Ruta</label> -->
+</p-button>

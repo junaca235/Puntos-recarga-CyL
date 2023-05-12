@@ -3,7 +3,7 @@ import { AnySourceData, LngLat, LngLatBounds, LngLatLike, Map, Marker, Popup } f
 import { Record} from '../interface/punto';
 import { DirectionsApiClient } from '../api';
 import { DirectionsResponse, Route } from '../interface/direction';
-import { Observable, Observer, Subject } from 'rxjs';
+import { Observable, Observer, Subject, BehaviorSubject } from 'rxjs';
 import Swal from 'sweetalert2';
 
 @Injectable({
@@ -15,17 +15,17 @@ export class MapService {
   map? : Map;
   private markers: Marker[] = [];
   private bounds: LngLatBounds = new LngLatBounds();
-  private ruta: Route | undefined;
+  private _route = new BehaviorSubject<Route>( {} as Route );
   private center: [number, number] = [-4.735524, 41.648903];
   private popupData = new Subject<LngLat>();
   private userLocation?: [number, number];
 
-  get mapa(){
+  get mapa() {
     return this.map;
   }
 
-  get route() {
-    return this.ruta;
+  get ruta() {
+    return this._route.asObservable();
   }
 
   get isMapReady() {
@@ -35,8 +35,6 @@ export class MapService {
   get popupInfo() {
     return this.popupData.asObservable();
   }
-  
-
 
   constructor( private dac: DirectionsApiClient ) {
     this.createMap();
@@ -62,12 +60,17 @@ export class MapService {
     //console.log( this.markers )
 
     this.map?.flyTo( {
-      center: coords,
-      zoom: 13
+      center: coords
     } );
 
   }
-
+  /** 
+   * Genera un mapa mapbox
+   * 
+   * Método que genera el mapa de mapbox con una serie de características
+   * que se le asignan y se alamcena el la variable map. La variable mapa$ 
+   * se almacena como observable para ser llamado. 
+   */
   createMap() {
 
     this.mapa$ = new Observable( (observer: Observer<Map>) => {
@@ -89,11 +92,28 @@ export class MapService {
     })
   }
 
+  /**
+   * Genera los marcadores que se le pasan
+   * 
+   * Método encargado de limpiar todos los marcadores del mapa y
+   * generar una nueva lista de marcadores con los puntos 
+   * que le pasen como parámetros. Después crea un nuevo LngLatBounds
+   * para guardar los marcadores y ajustar el zoom para todos sean 
+   * visibles.
+   * Si se le pasa userLocation también  creará el marcador de la 
+   * posición del usuario.
+   * 
+   * @var newMarkers Lista con todos los marcadores generados.
+   * @var newMarker Nuevo marcador generado.
+   * 
+   * @param puntos Lista de los puntos con los que se generarán los marcadores
+   * @param userLocation Coordenadas de la posición del ususario
+   */
   generarMarkers( puntos: Record[], userLocation: [number, number] |null = null) {
+    let newMarkers: Marker[] = [];
+    let newMarker: Marker;
 
     this.markers.forEach( marker => marker.remove() );
-    const newMarkers: Marker[] = [];
-    let newMarker: Marker;
 
     if( !this.map ) throw new Error("Mapa aún no inicializado");
 
@@ -106,7 +126,6 @@ export class MapService {
         newMarkers.push( newMarker );
       
     })
-
     
     this.markers = newMarkers;
 
@@ -117,19 +136,29 @@ export class MapService {
       .addTo(this.map!);
 
       this.bounds.extend( userLocation )
-    } 
-    
+    }  
 
     this.markers.forEach( marker => {
       this.bounds.extend( marker.getLngLat() )
     } )
 
     this.map.fitBounds( this.bounds, {
-      padding: 50
+      padding: 20
     } )
 
   }
-
+  
+  /**
+   * Pinta la ruta en el punto y la localización del ususario.
+   * 
+   * Método que borra los marcadores del mapa para mostrar los
+   * puntos pasados como parámetros y realiza una llamada a la
+   * base de datos para recoger la información de la ruta y 
+   * pintarla.
+   * 
+   * @param start Coordenadas de inicio de ruta (userLocation).
+   * @param end Coordenadas de final de ruta.
+   */
   getRouteBetweenPoints( start: [number, number], end: [number, number] ) {
 
     this.markers.forEach( marker => marker.remove() );
@@ -145,12 +174,25 @@ export class MapService {
     this.dac.get<DirectionsResponse>(`/${ start.join("%2C") }%3B${ end.join("%2C") }`)
       .subscribe( resp => {
         console.log( resp )
-        this.ruta = resp.routes[0];
-          this.drawPolyLine( resp.routes[0] )
+        const ruta = resp.routes[0];
+        this._route.next( ruta );
+        this.drawPolyLine( ruta );
       } );
 
   }
 
+  /** Pinta la ruta que se le pasa como parámetro.
+   * 
+   * Borra la ruta existente del mapa y genera una nueva
+   * con los nuevos datos.
+   * 
+   * @constant bounds Lista con los marcadores para ajustar el zoom.
+   * @constant coords Lista de coordenadas de la ruta.
+   * @constant sourceData Nueva ruta creada con las coordenadas pasadas
+   *  por parámetro.
+   * 
+   * @param route Coordenadas de la ruta a pintar
+   */
   private drawPolyLine( route: Route ) {
     console.log( { km: route.distance / 1000 } );
 
@@ -202,6 +244,9 @@ export class MapService {
 
   }
 
+  /**
+   * Elimina la ruta con un nombre en específico
+   */
   borrarRuta() {
     if( this.map?.getSource( "RouteString" ) ) {
       this.map?.removeLayer( "RouteString" )
@@ -209,6 +254,17 @@ export class MapService {
     } 
   }
 
+
+  /**
+   * Crea un nuevo marcador.
+   * 
+   * Método que genera un nuevo marcador con un popup que 
+   * contiene sus coordenadas.
+   * 
+   * @param lnglat Coordenadas del nuevo marcador
+   * @param color Color del marcador
+   * @returns El marcador generado
+   */
   createNewMarker( lnglat: [number, number], color?: string ): Marker {
 
     const popup = new Popup()
@@ -228,17 +284,25 @@ export class MapService {
     return newMarker;
   }
 
+  /**
+   * Desplaza el mapa a la localización asignada
+   * 
+   * 
+   * 
+   * 
+   * @param data Coordenadas
+   * @return Retorna null si data es la localización del usuario 
+   */
   clickPopup( data: LngLat ) {
     /* const lnglat = [data.lat, data.lng] */
-    if( data.toArray() == this.userLocation ){ return } 
+    if( data.lng == this.userLocation![1] && data.lat == this.userLocation![0] ){ return } 
     console.log(this.userLocation, data)
     this.popupData.next( data )
     this.flyTo( data );
   }
 
-  /* selectMarker( coords: LngLat ): LngLat {
-    return coords
-  } */
-
+  resetRoute() {
+    this._route.next( {} as Route );
+  }
 
 }
