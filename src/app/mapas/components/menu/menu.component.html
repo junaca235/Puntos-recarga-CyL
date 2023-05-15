@@ -1,19 +1,20 @@
 
 <p-sidebar  [(visible)]="sidebarVisible" 
             position="bottom" 
-            styleClass="p-sidebar-lg" 
+            class="sidebar"
             id="menu">
 
-    <ng-template pTemplate="header">
+    <ng-template pTemplate="header"
+                 id="header">
         <app-search-bar></app-search-bar>
     </ng-template>
     <ng-template pTemplate="body">
         <app-search-bar-results></app-search-bar-results>
     </ng-template>
-    
 
 </p-sidebar>
+
 <p-button (click)="sidebarVisible = true" 
-          icon="pi pi-arrow-up" 
-          id="menuButton">
+            icon="pi pi-arrow-up" 
+            class="menuButton">
 </p-button>

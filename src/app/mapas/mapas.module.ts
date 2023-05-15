@@ -12,10 +12,14 @@ import { SearchBarResultsComponent } from './components/search-bar-results/searc
 import { LnglatPipe } from './pipes/lnglat.pipe';
 import { LocationButtonComponent } from './components/location-button/location-button.component';
 import { InfoRutaComponent } from './components/info-ruta/info-ruta.component';
+import { RouteInfoComponent } from './components/route-info/route-info.component';
+import { TimetPipe } from './pipes/time.pipe';
+import { DistancePipe } from './pipes/distance.pipe';
 
 
 @NgModule({
   declarations: [
+    DistancePipe,
     HeaderComponent,
     LoadingComponent,
     MapaComponent,
@@ -25,6 +29,8 @@ import { InfoRutaComponent } from './components/info-ruta/info-ruta.component';
     LnglatPipe,
     LocationButtonComponent,
     InfoRutaComponent,
+    RouteInfoComponent,
+    TimetPipe
   ],
   imports: [
     CommonModule,
@@ -32,7 +38,9 @@ import { InfoRutaComponent } from './components/info-ruta/info-ruta.component';
     PrimeNgModule
   ], 
   exports: [
-    LnglatPipe
+    DistancePipe,
+    LnglatPipe,
+    TimetPipe
   ]
 })
 export class MapasModule { }

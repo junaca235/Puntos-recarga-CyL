@@ -3,11 +3,11 @@ import { MapDataService } from '../../services/mapData.service';
 import { MapService } from '../../services/map.service';
 import { Record } from '../../interface/punto';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-search-bar-results',
   templateUrl: './search-bar-results.component.html',
+  styleUrls: ["./search-bar-results.component.css"],
   styles: [`
     ul{
       padding: 0px

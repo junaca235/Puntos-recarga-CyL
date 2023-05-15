@@ -19,6 +19,15 @@ export class AuthService {
 
   constructor( private http: HttpClient ) { }
 
+  /**
+   * Verifica que los datos introducidos coinciden y logea al usuario
+   * 
+   * Método que comprueba si los datos coinciden en la base de datos
+   * 
+   * @param name 
+   * @param password 
+   * @returns 
+   */
   login( name: string, password: string ): Observable<boolean> {
 
     const url = `${this._baseUrl}/auth/`;
@@ -68,14 +77,15 @@ export class AuthService {
    */
   validarToken(): Observable<AuthResponse | boolean> {
 
-    const url = `${ this._baseUrl }/auth/newPunto`;
+    const url = `${ this._baseUrl }/auth/renew`;
     const headers = new HttpHeaders()
-      .set("x-token", localStorage.getItem("token") || "");
+      .set("token", localStorage.getItem("token") || "");
 
     return this.http.get<AuthResponse>( url , { headers } )
     .pipe(
       tap( resp => {
-        return resp
+        this.user = resp;
+        console.log(resp)
       } ),
       map( resp => resp.ok ),
       catchError( err => of(false) )

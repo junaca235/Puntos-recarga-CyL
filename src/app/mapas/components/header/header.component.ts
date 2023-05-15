@@ -4,6 +4,7 @@ import { MapDataService } from '../../services/mapData.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
+  styleUrls: ["./header.component.css"],
   styles: [`
     #header{
       width: 100%;
