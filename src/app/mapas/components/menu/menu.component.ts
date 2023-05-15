@@ -19,7 +19,7 @@ export class MenuComponent {
 
   ngOnInit(): void {
     
-    this.mapService.popupInfo
+    this.mapService.getPopupData
       .subscribe( () => {
         this.sidebarVisible = true;
         //this.mapService.selectMarker( data );

@@ -15,27 +15,28 @@ import Swal from 'sweetalert2';
 export class MapDataService {
 
   private _baseUrl: string = environment.jcylUrl;
-  private _puntos = new BehaviorSubject<Record[]>([]);
+  private puntos = new BehaviorSubject<Record[]>([]);
+  private loadingPuntos: boolean = false;
+  private userLocation: [number, number] | undefined;
 
-  isLoadingPuntos: boolean = false;
-
-  private _userLocation: [number, number] | undefined;
-  datosCargados: boolean = false;
-
-  get userLocation() {
-    return this._userLocation;
+  get getLocation() {
+    return this.userLocation;
   }
 
-  get puntos(){
-    return this._puntos.asObservable();
+  get getPuntos(){
+    return this.puntos.asObservable();
   }
 
-  get usuario() {
-    return this.authService.usuario;
+  get isLoadingPuntos() {
+    return this.loadingPuntos;
   }
 
-  get puntosFavoritos() {
-    return this.authService.usuario?.recordid;
+  get getUsuario() {
+    return this.authService.getUsuario;
+  }
+
+  get getPuntosFavoritos() {
+    return this.authService.getUsuario?.recordid;
   }
 
   constructor( private http: HttpClient,
@@ -60,10 +61,10 @@ export class MapDataService {
         await new Promise((resolve, reject) => {
             navigator.geolocation.getCurrentPosition(
                 ({ coords }) => {
-                    this._userLocation = [coords.longitude, coords.latitude] ;
+                    this.userLocation = [coords.longitude, coords.latitude] ;
                     this.mapService.setUserLocation([coords.latitude, coords.longitude]);
-                    this.mapService.createNewMarker( this._userLocation, "green" )
-                      .addTo(this.mapService.map!)
+                    this.mapService.createNewMarker( this.userLocation, "green" )
+                      .addTo(this.mapService.getMapa!)
                     resolve(true);
                 },
                 (err) => {
@@ -89,7 +90,7 @@ export class MapDataService {
    * @returns Array con los puntos obtenidos. Devuelve un array
    *          vacío si no se han encontrado puntos
    */
-  getPuntos( busqueda?: string, field?: string ): Observable<Record[]>{
+  chargePoints( busqueda?: string, field?: string ): Observable<Record[]>{
     let request = this._baseUrl;
 
     if( busqueda && field ){
@@ -124,12 +125,12 @@ export class MapDataService {
    * y actualiza los marcadores
    */
   getFavPoints() {
-    this.isLoadingPuntos = true;
+    this.loadingPuntos = true;
     let points: Record[] = [];
     
     let request: Observable<Puntos>[] = [];
 
-    this.puntosFavoritos?.forEach( id => {
+    this.getPuntosFavoritos?.forEach( id => {
       request.push( this.http.get<Puntos>(`${this._baseUrl}&refine.recordid=${ id }`) )
     })
 
@@ -139,7 +140,7 @@ export class MapDataService {
       points.push( punto.records[0] )
       )
         console.log("Points:", points)
-        this._puntos.next(points);
+        this.puntos.next(points);
       this.actualizarPuntos( points );
       this.mapService.generarMarkers( points, this.userLocation );
     } )
@@ -155,9 +156,9 @@ export class MapDataService {
    * @param puntos Array de puntos
    */
   actualizarPuntos( puntos: Record[] ) {
-    this._puntos.next(puntos);
+    this.puntos.next(puntos);
     this.mapService.borrarRuta();
-    this.isLoadingPuntos = false;
+    this.loadingPuntos = false;
   }
 
 }

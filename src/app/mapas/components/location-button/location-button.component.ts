@@ -15,7 +15,7 @@ export class LocationButtonComponent {
 
   goToMyLocation() {
 
-    const userLocation = this.mapDataService.userLocation;
+    const userLocation = this.mapDataService.getLocation;
 
     if(userLocation){
       this.mapService.flyTo( userLocation as LngLatLike);

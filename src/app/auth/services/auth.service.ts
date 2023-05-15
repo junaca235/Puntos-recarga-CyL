@@ -9,12 +9,11 @@ import { AuthResponse } from '../interfaces/auth.interface';
 })
 export class AuthService {
 
-  private _baseUrl = environment.mongoUrl;
-  //private _usuario = new Subject<AuthResponse>();
-  private user!: AuthResponse;
+  private baseUrl = environment.mongoUrl;
+  private usuario!: AuthResponse;
 
-  get usuario() {
-    return this.user;
+  get getUsuario() {
+    return this.usuario;
   }
 
   constructor( private http: HttpClient ) { }
@@ -30,7 +29,7 @@ export class AuthService {
    */
   login( name: string, password: string ): Observable<boolean> {
 
-    const url = `${this._baseUrl}/auth/`;
+    const url = `${this.baseUrl}/auth/`;
     const body = { name, password };
 
     return this.http.post<AuthResponse>( url , body)
@@ -40,7 +39,7 @@ export class AuthService {
             
             localStorage.setItem("token", resp.token!);
             //this._usuario.next( resp );
-            this.user = resp;
+            this.usuario = resp;
           }
         } ),
         map( resp => resp.ok ),
@@ -50,7 +49,7 @@ export class AuthService {
 
   registro( name: string, password: string ) {
 
-    const url = `${this._baseUrl}/auth/new`;
+    const url = `${this.baseUrl}/auth/new`;
     const body = { name, password }
 
     return this.http.post<AuthResponse>( url, body )
@@ -77,7 +76,7 @@ export class AuthService {
    */
   validarToken(): Observable<AuthResponse | boolean> {
 
-    const url = `${ this._baseUrl }/auth/renew`;
+    const url = `${ this.baseUrl }/auth/renew`;
     const headers = new HttpHeaders()
       .set("token", localStorage.getItem("token") || "");
 
@@ -85,7 +84,7 @@ export class AuthService {
     .pipe(
       tap( resp => {
         console.log(resp)
-        this.user = resp;
+        this.usuario = resp;
       } ),
       map( resp => resp ),
       catchError( err => of(false) )
@@ -95,12 +94,12 @@ export class AuthService {
 
   changeFavPoint( recordid: string, isfavourite: boolean ) {
 
-    let url = `${ this._baseUrl }/auth/`;
+    let url = `${ this.baseUrl }/auth/`;
 
     if( isfavourite ) url += "deletePunto";
     else url += "newPunto";
 
-    const body = { name: this.user.name, recordid}
+    const body = { name: this.usuario.name, recordid}
 
     return this.http.post<AuthResponse>(url, body)
     .pipe(

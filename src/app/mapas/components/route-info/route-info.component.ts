@@ -16,7 +16,7 @@ export class RouteInfoComponent {
 
   ngOnInit(): void {
     
-    this.mapService.ruta
+    this.mapService.getRuta
       .subscribe(
         ruta => this.ruta = ruta
       )

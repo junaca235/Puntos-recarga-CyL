@@ -11,7 +11,6 @@ import { SearchBarComponent } from './components/search-bar/search-bar.component
 import { SearchBarResultsComponent } from './components/search-bar-results/search-bar-results.component';
 import { LnglatPipe } from './pipes/lnglat.pipe';
 import { LocationButtonComponent } from './components/location-button/location-button.component';
-import { InfoRutaComponent } from './components/info-ruta/info-ruta.component';
 import { RouteInfoComponent } from './components/route-info/route-info.component';
 import { TimetPipe } from './pipes/time.pipe';
 import { DistancePipe } from './pipes/distance.pipe';
@@ -28,7 +27,6 @@ import { DistancePipe } from './pipes/distance.pipe';
     SearchBarResultsComponent,
     LnglatPipe,
     LocationButtonComponent,
-    InfoRutaComponent,
     RouteInfoComponent,
     TimetPipe
   ],

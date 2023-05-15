@@ -5,7 +5,7 @@
 
 <form class="mobile" 
       autocomplete="off"
-      [formGroup]="miFormulario"
+      [formGroup]="getMiFormulario"
       (ngSubmit)="login()">
 
     <div class="formulario">
@@ -28,7 +28,7 @@
 
         <button type="submit" 
                 class="boton"
-                [disabled]="miFormulario.invalid">
+                [disabled]="getMiFormulario.invalid">
                 Submit
         </button>
 

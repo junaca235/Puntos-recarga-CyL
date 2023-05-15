@@ -38,8 +38,8 @@ export class MapaComponent {
 
     ngOnInit(): void {
       
-      this.userLocation = this.mapDataService.userLocation;
-      this.mapService.ruta.subscribe(
+      this.userLocation = this.mapDataService.getLocation;
+      this.mapService.getRuta.subscribe(
         ruta => this.ruta = ruta
       );
       
@@ -53,11 +53,11 @@ export class MapaComponent {
 
   ngAfterViewInit(): void {
 
-    this.mapService.mapa$
+    this.mapService.getObservableMapa
       .subscribe( () => {
-        this.mapDataService.getPuntos().subscribe();
-        this.userLocation = this.mapDataService.userLocation;
-        this.mapService.mapa?.setCenter( this.userLocation || this.mapService.mapa.getCenter() );
+        this.mapDataService.chargePoints().subscribe();
+        //this.userLocation = this.mapDataService.getLocation;
+        this.mapService.getMapa?.setCenter( this.userLocation || this.mapService.getMapa.getCenter() );
 
       } )
 

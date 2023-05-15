@@ -12,10 +12,14 @@ import Swal from 'sweetalert2';
 })
 export class LoginComponent {
 
-  miFormulario: FormGroup = this.fb.group({
-    name: [ "Test1", [ Validators.required ] ],
-    password: [ "123456", [ Validators.required ] ],
+  private miFormulario: FormGroup = this.fb.group({
+    name: [ "", [ Validators.required ] ],
+    password: [ "", [ Validators.required ] ],
   })
+
+  get getMiFormulario() {
+    return this.miFormulario;
+  }
 
   constructor( private fb: FormBuilder,
                private router: Router,

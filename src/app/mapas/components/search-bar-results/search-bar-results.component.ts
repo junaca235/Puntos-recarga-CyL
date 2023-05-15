@@ -47,7 +47,7 @@ export class SearchBarResultsComponent {
 
   ngOnInit(): void {
     
-    this.mapService.popupInfo
+    this.mapService.getPopupData
       .subscribe( ( data ) => {
         const coord = `${data.lat},${data.lng}`;
         this.selectedId = coord
@@ -55,7 +55,7 @@ export class SearchBarResultsComponent {
         this.scrollToListItem( coord );
         /* this.mapService.selectMarker( data ); */
       })
-    this.userLocation = this.mapDataService.userLocation;
+    this.userLocation = this.mapDataService.getLocation;
 
       /* this.mapDataService.getPuntos()
         .subscribe( puntos => {
@@ -65,8 +65,8 @@ export class SearchBarResultsComponent {
          //this.mapDataService.getPuntos()
         
         
-      this.puntosFavoritos = this.mapDataService.puntosFavoritos;
-      this.mapDataService.puntos
+      this.puntosFavoritos = this.mapDataService.getPuntosFavoritos;
+      this.mapDataService.getPuntos
         .subscribe( puntos => {
           this.puntos = puntos
           if( this.puntosFavoritos ) {
@@ -79,7 +79,7 @@ export class SearchBarResultsComponent {
 
   flyTo( punto: Record ){
     const coord = punto.fields.dd.join(",");
-    this.selectedId = coord;//TODO: cambiar por el pipe lnglat
+    this.selectedId = coord;
     this.mapService.flyTo( [punto.fields.dd[1], punto.fields.dd[0]] );
   }
 
@@ -96,9 +96,9 @@ export class SearchBarResultsComponent {
 
   getDirections( punto: Record ) {
 
-    if( !this.mapDataService.userLocation ) throw Error("No se encontró la posición de inicio");
+    if( !this.mapDataService.getLocation ) throw Error("No se encontró la posición de inicio");
 
-    this.mapService.getRouteBetweenPoints( this.mapDataService.userLocation , [ punto.fields.dd[1], punto.fields.dd[0] ] )
+    this.mapService.getRouteBetweenPoints( this.mapDataService.getLocation , [ punto.fields.dd[1], punto.fields.dd[0] ] )
 
   }
 
@@ -111,7 +111,6 @@ export class SearchBarResultsComponent {
         if( ok ) {
           punto!.favourite = !punto!.favourite!;
           const puntoId = punto!.recordid;
-          //TODO: Cambiar el valor favourite del punto elegido
           if(this.puntosFavoritos?.includes(punto!.recordid)){
             this.puntosFavoritos = this.puntosFavoritos.filter(punto => punto !== puntoId)
           } else {
@@ -122,7 +121,6 @@ export class SearchBarResultsComponent {
         }
       });
 
-    /* this.isFavourite = !this.isFavourite; */
   }
 
   checkFavourites() {

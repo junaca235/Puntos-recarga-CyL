@@ -11,8 +11,8 @@ import Swal from 'sweetalert2';
 })
 export class MapService {
 
-  mapa$!: Observable<Map>;
-  map? : Map;
+  private mapa$!: Observable<Map>;
+  private mapa? : Map;
   private markers: Marker[] = [];
   private bounds: LngLatBounds = new LngLatBounds();
   private _route = new BehaviorSubject<Route>( {} as Route );
@@ -20,19 +20,23 @@ export class MapService {
   private popupData = new Subject<LngLat>();
   private userLocation?: [number, number];
 
-  get mapa() {
-    return this.map;
+  get getMapa() {
+    return this.mapa;
   }
 
-  get ruta() {
+  get getObservableMapa() {
+    return this.mapa$;
+  }
+
+  get getRuta() {
     return this._route.asObservable();
   }
 
   get isMapReady() {
-    return !!this.map;
+    return !!this.mapa;
   }
 
-  get popupInfo() {
+  get getPopupData() {
     return this.popupData.asObservable();
   }
 
@@ -42,7 +46,7 @@ export class MapService {
 
 
   setMap( map: Map ) {
-    this.map = map;
+    this.mapa = map;
   }
 
   setUserLocation( coords: [number, number] ) {
@@ -68,7 +72,7 @@ export class MapService {
       Swal.fire( "Error", "Marcador no encontrado", "error" );
     }
 
-    this.map?.flyTo( {
+    this.mapa?.flyTo( {
       center: coords
     } );
 
@@ -84,7 +88,7 @@ export class MapService {
 
     this.mapa$ = new Observable( (observer: Observer<Map>) => {
     
-      this.map = new Map({
+      this.mapa = new Map({
         container: "mapaElement",
         style: 'mapbox://styles/mapbox/streets-v11',
         center: this.center,
@@ -93,8 +97,8 @@ export class MapService {
         minZoom: 4
       });
 
-      this.map.on("load", () => {
-        observer.next( this.map! );
+      this.mapa.on("load", () => {
+        observer.next( this.mapa! );
         observer.complete;
       })
       
@@ -124,13 +128,13 @@ export class MapService {
 
     this.markers.forEach( marker => marker.remove() );
 
-    if( !this.map ) throw new Error("Mapa aún no inicializado");
+    if( !this.mapa ) throw new Error("Mapa aún no inicializado");
 
     puntos.forEach( punto => {
 
       const coords = punto.fields.dd;
       newMarker = this.createNewMarker([coords[1], coords[0]] )
-        .addTo(this.map!)
+        .addTo(this.mapa!)
 
         newMarkers.push( newMarker );
       
@@ -142,7 +146,7 @@ export class MapService {
 
     if( userLocation) {
       newMarker = this.createNewMarker( userLocation, "green" )
-      .addTo(this.map!);
+      .addTo(this.mapa!);
 
       this.bounds.extend( userLocation )
     }  
@@ -151,7 +155,7 @@ export class MapService {
       this.bounds.extend( marker.getLngLat() )
     } )
 
-    this.map.fitBounds( this.bounds, {
+    this.mapa.fitBounds( this.bounds, {
       padding: 20
     } )
 
@@ -173,11 +177,11 @@ export class MapService {
     this.markers.forEach( marker => marker.remove() );
 
     let newMarker = this.createNewMarker( end )
-    .addTo(this.map!);
+    .addTo(this.mapa!);
     this.markers.push( newMarker );
 
     newMarker = this.createNewMarker( start, "green" )
-    .addTo(this.map!);
+    .addTo(this.mapa!);
     this.markers.push( newMarker );
 
     this.dac.get<DirectionsResponse>(`/${ start.join("%2C") }%3B${ end.join("%2C") }`)
@@ -212,7 +216,7 @@ export class MapService {
       bounds.extend( [lng, lat] );
     } );
 
-    this.map?.fitBounds( bounds, {
+    this.mapa?.fitBounds( bounds, {
       padding: 100
     } );
     
@@ -235,9 +239,9 @@ export class MapService {
     
     this.borrarRuta();
      
-    this.map?.addSource( "RouteString", sourceData );
+    this.mapa?.addSource( "RouteString", sourceData );
 
-    this.map?.addLayer({
+    this.mapa?.addLayer({
       id:"RouteString",
       type: "line",
       source: "RouteString",
@@ -257,9 +261,9 @@ export class MapService {
    * Elimina la ruta con el nombre "RouteString"
    */
   borrarRuta() {
-    if( this.map?.getSource( "RouteString" ) ) {
-      this.map?.removeLayer( "RouteString" )
-      this.map?.removeSource( "RouteString" )
+    if( this.mapa?.getSource( "RouteString" ) ) {
+      this.mapa?.removeLayer( "RouteString" )
+      this.mapa?.removeSource( "RouteString" )
     } 
   }
 

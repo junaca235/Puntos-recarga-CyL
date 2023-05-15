@@ -41,7 +41,7 @@ export class SearchBarComponent {
 
   ngOnInit(): void {
     
-    this.hasFavPoints = this.mapDataService.usuario?.recordid? true : false;
+    this.hasFavPoints = this.mapDataService.getUsuario?.recordid? true : false;
     
   }
 
@@ -53,9 +53,9 @@ export class SearchBarComponent {
     if( filtro === "favoritos" ) {
       this.mapDataService.getFavPoints();
     } else if( query === "" ){
-      this.mapDataService.getPuntos().subscribe();
+      this.mapDataService.chargePoints().subscribe();
     } else {
-        this.mapDataService.getPuntos( query, filtro ).subscribe();
+        this.mapDataService.chargePoints( query, filtro ).subscribe();
     }
     
     this.query.nativeElement.value = "";
