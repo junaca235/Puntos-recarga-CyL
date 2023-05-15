@@ -1,10 +1,9 @@
 
-<app-header></app-header>
+<app-header [usuario]="usuario"></app-header>
 
 <app-route-info *ngIf="ruta?.distance"></app-route-info>
-<app-location-button></app-location-button>
 
-<!-- <app-info-ruta></app-info-ruta> -->
+<app-location-button></app-location-button>
 
 <div id="mapaElement" class="mapa-container"></div>
 

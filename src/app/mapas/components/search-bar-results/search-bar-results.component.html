@@ -13,7 +13,7 @@
             id="{{punto.fields.dd.join(',')}}"
             (click)="flyTo( punto )">
             
-            <div class="flex align-items-center p-2 w-full flex-wrap col-11">
+            <div class="flex align-items-center p-2 w-full flex-wrap col-10">
                 <div class="flex-1">
                     <h5 class="mb-2"> {{ punto.fields.nombre }} </h5>
                     <i class="pi pi-bolt vertical-align-middle mr-2" 
@@ -38,7 +38,7 @@
                     Ruta
                 </button>
             </div>
-            <div class="col-1">
+            <div class="col-2">
                 <button class="p-button p-button-text"
                         (click)="changeFavourite(  punto.recordid  )">
                     <i class="pi" 

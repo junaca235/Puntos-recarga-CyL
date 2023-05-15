@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 
 import * as mapboxgl from "mapbox-gl"; //Recoge toda la librería y la llama mapboxgl
-import { Usuario } from 'src/app/auth/interfaces/auth.interface';
+import { AuthResponse, Usuario } from 'src/app/auth/interfaces/auth.interface';
 import { MapDataService } from '../../services/mapData.service';
 import { MapService } from '../../services/map.service';
-import { Record } from '../../interface/punto';
 import { Route } from '../../interface/direction';
 import { AuthService } from 'src/app/auth/services/auth.service';
 
@@ -21,8 +20,7 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 export class MapaComponent {
 
   private mapa!: mapboxgl.Map;
-  private puntos: Record[] = [];
-  private _usuario!: Usuario;
+  private _usuario!: AuthResponse;
   userLocation: [number, number] | undefined;
   ruta: Route | undefined;
 
@@ -39,14 +37,16 @@ export class MapaComponent {
                private authService: AuthService ) { }
 
     ngOnInit(): void {
-      //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-      //Add 'implements OnInit' to the class.
+      
       this.userLocation = this.mapDataService.userLocation;
       this.mapService.ruta.subscribe(
         ruta => this.ruta = ruta
       );
+      
       this.authService.validarToken().subscribe(
-        () => console.log("ValidarToken")
+        ( resp ) => {
+          this._usuario = resp as AuthResponse; 
+        }
       );
 
     }
@@ -55,17 +55,11 @@ export class MapaComponent {
 
     this.mapService.mapa$
       .subscribe( () => {
-        this.mapDataService.getPuntos().subscribe( puntos => {
-          this.puntos = puntos
-        });
+        this.mapDataService.getPuntos().subscribe();
         this.userLocation = this.mapDataService.userLocation;
         this.mapService.mapa?.setCenter( this.userLocation || this.mapService.mapa.getCenter() );
 
       } )
-    
-    /* this.mapDataService.getPuntos().subscribe( puntos => {
-      this.puntos = puntos
-    }); */
 
   }
 

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Observable, Subject, catchError, map, of, tap } from 'rxjs';
+import { Observable, catchError, map, of, tap } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AuthResponse, Usuario } from '../interfaces/auth.interface';
+import { AuthResponse } from '../interfaces/auth.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -84,10 +84,10 @@ export class AuthService {
     return this.http.get<AuthResponse>( url , { headers } )
     .pipe(
       tap( resp => {
-        this.user = resp;
         console.log(resp)
+        this.user = resp;
       } ),
-      map( resp => resp.ok ),
+      map( resp => resp ),
       catchError( err => of(false) )
     )
 

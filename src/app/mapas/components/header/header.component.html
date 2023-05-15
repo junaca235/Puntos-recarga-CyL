@@ -1,5 +1,6 @@
 <p-toolbar id="header">
     <div class="p-toolbar-group-start">
+        <!-- TODO: Colocar logo -->
         <i class="p-toolbar-separator pi pi-bars mr-2"
            style="vertical-align: middle"></i>
     </div>
@@ -17,7 +18,7 @@
 
     <ng-template #logeado>
         <div class="p-toolbar-group-end">
-            <span>{{ usuario }}</span>
+            <span>{{ usuario!.name }}</span>
             <p-button styleClass="p-button-danger"
                       (onClick)="logOut()">
                 Cerrar sesión

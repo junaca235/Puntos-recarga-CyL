@@ -1,5 +1,7 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { MapDataService } from '../../services/mapData.service';
+import { AuthService } from 'src/app/auth/services/auth.service';
+import { AuthResponse, Usuario } from 'src/app/auth/interfaces/auth.interface';
 
 @Component({
   selector: 'app-header',
@@ -16,18 +18,11 @@ import { MapDataService } from '../../services/mapData.service';
 })
 export class HeaderComponent {
 
-  //@Input() usuario: Usuario | undefined;
+  @Input() usuario: AuthResponse | undefined;
 
-  usuario: string | undefined;
-
-  constructor( private mapDataService: MapDataService ) {}
-
-  ngOnInit(): void {
-    
-    this.usuario = this.mapDataService.usuario?.name;
-
-  }
-
+  /**
+   * Elimina el token del LocalStorage y recarga la página
+   */
   logOut() {
     localStorage.removeItem("token");
     location.reload();
