@@ -49,6 +49,16 @@ export class MapService {
     this.userLocation = coords;
   }
 
+  /**
+   * Centra el mapa en las coordenadas especificadas
+   * 
+   * Método que centra el mapa en las coordenadas pasadas como
+   * parámetro. 
+   * Si el mapa aún no esta listo lanza un error. 
+   * Si no encuentra el marcador muestra un mensaje informativo.
+   * 
+   * @param coords Coordenadas donde se centrará el mapa
+   */
   flyTo( coords: LngLatLike ) {
     
     if ( !this.isMapReady)  throw Error("El mapa no está inicializado");
@@ -57,7 +67,6 @@ export class MapService {
       console.log(" Marcador no encontrado ")
       Swal.fire( "Error", "Marcador no encontrado", "error" );
     }
-    //console.log( this.markers )
 
     this.map?.flyTo( {
       center: coords
@@ -245,7 +254,7 @@ export class MapService {
   }
 
   /**
-   * Elimina la ruta con un nombre en específico
+   * Elimina la ruta con el nombre "RouteString"
    */
   borrarRuta() {
     if( this.map?.getSource( "RouteString" ) ) {
@@ -287,7 +296,7 @@ export class MapService {
   /**
    * Desplaza el mapa a la localización asignada
    * 
-   * 
+   * Método que 
    * 
    * 
    * @param data Coordenadas
@@ -301,6 +310,9 @@ export class MapService {
     this.flyTo( data );
   }
 
+  /**
+   * Reseta la información de la ruta
+   */
   resetRoute() {
     this._route.next( {} as Route );
   }

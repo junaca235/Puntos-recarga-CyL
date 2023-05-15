@@ -53,8 +53,6 @@ export class MapDataService {
    * Si se acepta el permiso se recogen las coordenadas y se genera
    * un marcador con la ubicación del usuario.
    * Si no se acepta muestra un mensaje de error.
-   * 
-   * return 
    */
   async getUserLocation() {
 
@@ -76,11 +74,21 @@ export class MapDataService {
             )
         });
     }
-
-    //return this.userLocation;
   }
 
-
+  /**
+   * Devuelve los puntos filtrados y actualiza los marcadores
+   * 
+   * Método que realiza una llamada httpClient para recoger todos
+   * los datos de los puntos.
+   * Si se le pasan ambos parámetros realiza la búsqueda por
+   * los filtros indicados
+   * 
+   * @param busqueda Nombre por el que se realiza la búsqueda
+   * @param field Filtro por el que se realiza la búsqueda
+   * @returns Array con los puntos obtenidos. Devuelve un array
+   *          vacío si no se han encontrado puntos
+   */
   getPuntos( busqueda?: string, field?: string ): Observable<Record[]>{
     let request = this._baseUrl;
 
@@ -109,6 +117,12 @@ export class MapDataService {
 
   }
 
+  /**
+   * Recoge los puntos favoritos del ususario y actuliza los marcadores
+   * 
+   * Método que realiza una petición httpClient por cada punto favorito
+   * y actualiza los marcadores
+   */
   getFavPoints() {
     this.isLoadingPuntos = true;
     let points: Record[] = [];
@@ -132,6 +146,14 @@ export class MapDataService {
     
   }
 
+  /**
+   * Actualiza los puntos
+   * 
+   * Método que actualiza los puntos por aquellos pasados
+   * por parámetro y elimina la ruta existente
+   * 
+   * @param puntos Array de puntos
+   */
   actualizarPuntos( puntos: Record[] ) {
     this._puntos.next(puntos);
     this.mapService.borrarRuta();
