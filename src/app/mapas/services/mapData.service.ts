@@ -134,16 +134,25 @@ export class MapDataService {
       request.push( this.http.get<Puntos>(`${this._baseUrl}&refine.recordid=${ id }`) )
     })
 
-    forkJoin( request )
-    .subscribe( responses => {
-      responses.forEach( punto => 
-      points.push( punto.records[0] )
-      )
-        console.log("Points:", points)
-        this.puntos.next(points);
-      this.actualizarPuntos( points );
-      this.mapService.generarMarkers( points, this.userLocation );
-    } )
+    if( request.length>0 ) {
+
+      forkJoin( request )
+        .subscribe( responses => {
+          responses.forEach( punto => 
+          points.push( punto.records[0] )
+          )
+            console.log("Points:", points)
+            this.puntos.next(points);
+          this.actualizarPuntos( points );
+          this.mapService.generarMarkers( points, this.userLocation );
+        } );
+
+    } else {
+      this.chargePoints("").subscribe();
+      //TODO: Cambiar alert
+      Swal.fire("Error", "No tienes puntos guardados.", "error");
+    }
+    
     
   }
 

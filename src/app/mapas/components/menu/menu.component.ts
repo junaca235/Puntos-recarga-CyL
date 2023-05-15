@@ -22,7 +22,6 @@ export class MenuComponent {
     this.mapService.getPopupData
       .subscribe( () => {
         this.sidebarVisible = true;
-        //this.mapService.selectMarker( data );
       })
 
   }

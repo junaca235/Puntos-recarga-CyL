@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ValidatorService } from 'src/app/shared/validators/validator.service';
+
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+
 import Swal from 'sweetalert2';
 
 @Component({
@@ -14,18 +14,16 @@ import Swal from 'sweetalert2';
 export class RegistroComponent {
 
   miFormulario: FormGroup = this.fb.group({
-    name: [ "test1", [ Validators.required ] ],
-    password: [ "123456", [ Validators.required, Validators.minLength(6) ] ],
-    confirmar: [ "123456", [ Validators.required ] ],
+    name: [ "", [ Validators.required ] ],
+    password: [ "", [ Validators.required, Validators.minLength(6) ] ],
+    confirmar: [ "", [ Validators.required ] ],
   },
   {
-    validators: [ this.vs.camposIguales( "password", "confirmar" ) ]
+    validators: [ this.authService.camposIguales( "password", "confirmar" ) ]
   });
 
   constructor( private fb: FormBuilder,
-               private vs: ValidatorService,
-               private authService: AuthService,
-               private router: Router ) {}
+               private authService: AuthService ) {}
 
   registro() {
 

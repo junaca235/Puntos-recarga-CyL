@@ -14,6 +14,8 @@ import { LocationButtonComponent } from './components/location-button/location-b
 import { RouteInfoComponent } from './components/route-info/route-info.component';
 import { TimetPipe } from './pipes/time.pipe';
 import { DistancePipe } from './pipes/distance.pipe';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 
 @NgModule({

@@ -3,6 +3,7 @@ import { environment } from 'src/environments/environment';
 import { Observable, catchError, map, of, tap } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthResponse } from '../interfaces/auth.interface';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -112,6 +113,24 @@ export class AuthService {
         return of(false);
       })
     );
+  }
+
+  camposIguales(campo1: string, campo2: string) {
+    return (formGroup: AbstractControl): ValidationErrors | null => {
+
+      const pass1 = formGroup.get( campo1 )?.value;
+      const pass2 = formGroup.get( campo2 )?.value;
+
+      if( pass1 !== pass2 ){
+        formGroup.get("campo")?.setErrors({ noIgulaes: true })
+        return { noIguales: true }
+      }
+
+
+      formGroup.get("campo")?.setErrors({ noIgulaes: null })
+
+      return null;
+    } 
   }
 
 }

@@ -53,7 +53,6 @@ export class SearchBarResultsComponent {
         this.selectedId = coord
         //console.log(`${data.lat},${data.lng}`)
         this.scrollToListItem( coord );
-        /* this.mapService.selectMarker( data ); */
       })
     this.userLocation = this.mapDataService.getLocation;
 
@@ -103,21 +102,22 @@ export class SearchBarResultsComponent {
   }
 
   changeFavourite( recordid: string ) {
-    const punto =  this.puntos.find( punto => punto.recordid === recordid );
+    let punto =  this.puntos.find( punto => punto.recordid === recordid );
     
     this.authService.changeFavPoint( recordid, punto!.favourite )
       .subscribe( ok => {
-        console.log(ok)
+        
         if( ok ) {
           punto!.favourite = !punto!.favourite!;
           const puntoId = punto!.recordid;
           if(this.puntosFavoritos?.includes(punto!.recordid)){
-            this.puntosFavoritos = this.puntosFavoritos.filter(punto => punto !== puntoId)
+            this.mapDataService.getUsuario.recordid = this.mapDataService.getUsuario.recordid?.filter(punto => punto !== puntoId)
           } else {
-            this.puntosFavoritos?.push(puntoId)
+            this.mapDataService.getUsuario.recordid?.push(puntoId)
           }
+          this.puntosFavoritos = this.mapDataService.getUsuario.recordid;
           //this.puntosFavoritos = this.mapDataService.puntosFavoritos;
-          console.log(this.puntosFavoritos)
+          console.log(this.puntosFavoritos, punto?.favourite)
         }
       });
 
