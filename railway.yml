@@ -1,0 +1,13 @@
+# railway.yml
+
+plugins:
+  - ...
+  
+services:
+  puntos-recarga:
+    # Configuración de tu servicio
+    
+    headers:
+      Access-Control-Allow-Origin: "http://puntos-recarga-cyl.up.railway.app"
+      Access-Control-Allow-Methods: "GET, POST, PUT, DELETE"
+      Access-Control-Allow-Headers: "Content-Type"
