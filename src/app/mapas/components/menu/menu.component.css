@@ -12,17 +12,22 @@
   height: fit-content;
   max-height: 50vh;
   min-height: 20vh;
+  border-radius: 10px 10px 0px 0px;
+  /* border: 2px solid black; */
   
   transition: height 0.5s ease-in-out;
 }
 :host ::ng-deep .p-sidebar-header{
   justify-content: space-between;
+  padding: 10px 20px;
+  /* border-radius: 10px;
+  background-color: lightgreen; */
 }
 :host ::ng-deep .p-sidebar-content{
   padding: 0px;
 }
 :host ::ng-deep .p-sidebar-footer{
-  padding: 0px;
+  padding: 5px;
 }
 :host ::ng-deep .p-sidebar-header>.p-ripple{
   margin: 0px;

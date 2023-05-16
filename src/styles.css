@@ -101,12 +101,12 @@ html, body {
 
     /* Scrollbar */
     ::-webkit-scrollbar {
-      width: 12px; /* Ancho del scrollbar */
+      width: 6px; /* Ancho del scrollbar */
   }
     
   ::-webkit-scrollbar-thumb {
       background-color: black; /* Color del pulgar del scrollbar */
-      border-radius: 6px; /* Bordes redondeados del pulgar */
+      border-radius: 3px; /* Bordes redondeados del pulgar */
   }
   
   ::-webkit-scrollbar-thumb:hover {

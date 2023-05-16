@@ -298,16 +298,12 @@ export class MapService {
   }
 
   /**
-   * Desplaza el mapa a la localización asignada
-   * 
-   * Método que 
-   * 
+   * Desplaza el mapa a la localización asignada al pulsar el marker
    * 
    * @param data Coordenadas
    * @return Retorna null si data es la localización del usuario 
    */
   clickPopup( data: LngLat ) {
-    /* const lnglat = [data.lat, data.lng] */
     if( data.lng == this.userLocation![1] && data.lat == this.userLocation![0] ){ return } 
     console.log(this.userLocation, data)
     this.popupData.next( data )

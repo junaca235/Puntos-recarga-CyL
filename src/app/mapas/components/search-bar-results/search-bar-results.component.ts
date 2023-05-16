@@ -9,20 +9,7 @@ import { AuthService } from 'src/app/auth/services/auth.service';
   templateUrl: './search-bar-results.component.html',
   styleUrls: ["./search-bar-results.component.css"],
   styles: [`
-    ul{
-      padding: 0px
-    }
-    li{
-      cursor: pointer;
-      display:flex;
-      flex-direction: row;
-    }
-    button:focus{
-      outline: none;
-    }
-    button>i{
-      color: lightgreen; 
-    }
+
   `]
 })
 export class SearchBarResultsComponent {
@@ -36,10 +23,6 @@ export class SearchBarResultsComponent {
   get isLoadingPuntos() {
     return this.mapDataService.isLoadingPuntos;
   }
-
-  /* get puntos() {
-    return this.mapDataService.puntos;
-  } */
 
   constructor( private mapDataService: MapDataService,
                private mapService: MapService,
@@ -74,7 +57,6 @@ export class SearchBarResultsComponent {
         } );
 
   }
-
 
   flyTo( punto: Record ){
     const coord = punto.fields.dd.join(",");
@@ -129,6 +111,14 @@ export class SearchBarResultsComponent {
         punto.favourite = true;
       }
     } )
+  }
+
+  arrayOf( n: string ) {
+    let array: number[] = new Array();
+   for (let i = 0; i < Number(n); i++) {
+    array.push(i);
+   }
+   return array;
   }
 
 }
