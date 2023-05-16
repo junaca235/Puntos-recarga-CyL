@@ -12,7 +12,13 @@ const app = express();
 dbConnection();
 
 //Directorio público
-app.use( express.static( "public" ) )
+app.use( express.static( "public", { 
+  setHeaders: (res, path, stat) => {
+    if (path.endsWith('.js')) {
+      res.set('Content-Type', 'application/javascript');
+    }
+  }
+} ) )
 
 //CORS
 app.use( cors() );
