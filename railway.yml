@@ -8,6 +8,6 @@ services:
     # Configuración de tu servicio
     
     headers:
-      Access-Control-Allow-Origin: "http://puntos-recarga-cyl.up.railway.app"
+      Access-Control-Allow-Origin: "https://puntos-recarga-cyl.up.railway.app"
       Access-Control-Allow-Methods: "GET, POST, PUT, DELETE"
       Access-Control-Allow-Headers: "Content-Type"
