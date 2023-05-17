@@ -8,6 +8,8 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-registro',
   templateUrl: './registro.component.html',
+  
+  styleUrls: [ '../../styles/shared.css' ],
   styles: [
   ]
 })
@@ -25,6 +27,13 @@ export class RegistroComponent {
   constructor( private fb: FormBuilder,
                private authService: AuthService ) {}
 
+
+  /**
+   * Registra un nuevo ususario
+   * 
+   * Método que crea un nuevo usuario 
+   * y muestra un mensaje de información.
+   */
   registro() {
 
     const { name, password } = this.miFormulario.value;

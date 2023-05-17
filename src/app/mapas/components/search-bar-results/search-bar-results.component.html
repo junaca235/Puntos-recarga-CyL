@@ -8,7 +8,7 @@
     <ul class="list-group mt-2">
         <li *ngFor="let punto of puntos"
             class="list-group-item list-group-item-action"
-            [class.active]="punto.fields.dd.join(',') === selectedId"
+            [class.active]="punto.fields.dd.join(',') == selectedId"
             filterPlaceholder="Filter by name"
             id="{{punto.fields.dd.join(',')}}"
             (click)="flyTo( punto )">
@@ -24,10 +24,8 @@
                     
                 </div>
                 <div class="flex flex-row align-items-end">
-                    <!-- <h6 class="mb-2"> Nº conectores: {{ punto.fields.no }} -->
-                        <i *ngFor="let item of arrayOf(punto.fields.no)"
-                           class="pi pi-arrow-up conector"></i> 
-                    <!-- </h6> -->
+                    <i *ngFor="let item of arrayOf(punto.fields.no)"
+                        class="pi pi-arrow-up conector"></i>
                 </div>
                 <div class="flex flex-column align-items-end">
                     <h6 class="mb-2">

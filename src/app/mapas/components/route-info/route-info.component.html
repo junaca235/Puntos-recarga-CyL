@@ -6,7 +6,7 @@
     </ng-template> -->
     <ng-template pTemplate="body">
         <!-- <ul> -->
-            <h6>{{ ruta.distance | distance | number }} km | {{ ruta.duration | time }} </h6>
+            <h6>{{ ruta.distance | distance: 'm': 'km' | number }} km | {{ ruta.duration | time }} </h6>
             <ol>
                 <li *ngFor="let step of ruta.legs[0].steps">
                     {{ step.maneuver.instruction }}

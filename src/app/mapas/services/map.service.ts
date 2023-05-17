@@ -77,6 +77,7 @@ export class MapService {
     } );
 
   }
+
   /** 
    * Genera un mapa mapbox
    * 
@@ -305,7 +306,7 @@ export class MapService {
    */
   clickPopup( data: LngLat ) {
     if( data.lng == this.userLocation![1] && data.lat == this.userLocation![0] ){ return } 
-    console.log(this.userLocation, data)
+    console.log(data)
     this.popupData.next( data )
     this.flyTo( data );
   }

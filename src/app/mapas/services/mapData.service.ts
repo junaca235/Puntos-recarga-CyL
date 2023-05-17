@@ -111,7 +111,7 @@ export class MapDataService {
         }),
         catchError((error) => {
           console.log('Error:', error);
-
+          Swal.fire( "Error", "No se encontraron puntos", "error" );
           return [];
         })
       );

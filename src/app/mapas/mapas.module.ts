@@ -9,13 +9,10 @@ import { LoadingComponent } from './components/loading/loading.component';
 import { MapaComponent } from './pages/mapa/mapa.component';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { SearchBarResultsComponent } from './components/search-bar-results/search-bar-results.component';
-import { LnglatPipe } from './pipes/lnglat.pipe';
 import { LocationButtonComponent } from './components/location-button/location-button.component';
 import { RouteInfoComponent } from './components/route-info/route-info.component';
 import { TimetPipe } from './pipes/time.pipe';
 import { DistancePipe } from './pipes/distance.pipe';
-import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
 
 
 @NgModule({
@@ -27,7 +24,6 @@ import { ToastModule } from 'primeng/toast';
     MenuComponent,
     SearchBarComponent,
     SearchBarResultsComponent,
-    LnglatPipe,
     LocationButtonComponent,
     RouteInfoComponent,
     TimetPipe
@@ -39,7 +35,6 @@ import { ToastModule } from 'primeng/toast';
   ], 
   exports: [
     DistancePipe,
-    LnglatPipe,
     TimetPipe
   ]
 })

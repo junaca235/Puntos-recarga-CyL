@@ -5,7 +5,6 @@ import { SidebarModule } from 'primeng/sidebar';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 
-
 @NgModule({
   exports: [
     ButtonModule,

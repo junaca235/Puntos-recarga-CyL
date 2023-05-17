@@ -5,9 +5,16 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TimetPipe implements PipeTransform {
 
-  transform( tiempo: number): string {
-    const horas = Math.floor(tiempo / 3600);
-    const minutos = Math.floor((tiempo % 3600) / 60);
+  /**
+   * Devuelve los segundos pasados por parámetro
+   * en horas y minutos
+   * 
+   * @param value Tiempo en segundos
+   * @returns Tiempo en horas y minutos
+   */
+  transform( value: number): string {
+    const horas = Math.floor(value / 3600);
+    const minutos = Math.floor((value % 3600) / 60);
 
     let time: string = "";
 

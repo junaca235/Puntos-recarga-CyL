@@ -3,42 +3,40 @@
     <i class="pi pi-arrow-left arrow-return"></i>
 </a>
 
-<form class="mobile" 
+<section class="auth-content">
+  
+  <form class="formulario" 
       autocomplete="off"
       [formGroup]="getMiFormulario"
       (ngSubmit)="login()">
 
-    <div class="formulario">
-      <div class="form-content">
+      <h2 class="titulo">Log in</h2>
 
-        <h2 class="titulo log-in">Log in</h2>
-
-        <div class="input-container">
-          <input class="input"
-                 type="text"
-                 placeholder="Nombre"
-                 formControlName="name">
-        </div>
-        <div class="input-container">
-          <input class="input"
-                 type="password"
-                 placeholder="Password"
-                 formControlName="password">
-        </div>
-
-        <button type="submit" 
-                class="boton"
-                [disabled]="getMiFormulario.invalid">
-                Submit
-        </button>
-
-        <div class="sign-in">
-          <span class="not-tienes-cuenta">¿No tienes cuenta?</span>
-          <a class="crear-una-aqui"
-             routerLink="/auth/registro">CREAR UNA AQUÍ</a>
-        </div>
-
+      <div class="input-container">
+        <input class="input"
+                type="text"
+                placeholder="Nombre"
+                formControlName="name">
       </div>
-    </div>
+      <div class="input-container">
+        <input class="input"
+                type="password"
+                placeholder="Password"
+                formControlName="password">
+      </div>
 
-</form>
+      <button type="submit" 
+              class="boton"
+              [disabled]="getMiFormulario.invalid">
+              Submit
+      </button>
+
+      <div class="sign-in">
+        <span class="not-tienes-cuenta">¿No tienes cuenta?</span>
+        <a class="crear-una-aqui"
+            routerLink="/auth/registro">CREAR UNA AQUÍ</a>
+      </div>
+
+  </form>
+
+</section>

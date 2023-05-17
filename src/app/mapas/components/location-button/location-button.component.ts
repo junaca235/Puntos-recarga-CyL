@@ -13,6 +13,11 @@ export class LocationButtonComponent {
   constructor( private mapDataService: MapDataService,
                private mapService: MapService ) {}
 
+  /**
+   * Comprueba si existe la localización del usuario y 
+   * centra el mapa en ella.
+   * Si no existe intenta obtenerla.
+   */
   goToMyLocation() {
 
     const userLocation = this.mapDataService.getLocation;

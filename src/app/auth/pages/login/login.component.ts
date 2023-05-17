@@ -7,14 +7,15 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
+  styleUrls: [ '../../styles/shared.css' ],
   styles: [
   ]
 })
 export class LoginComponent {
 
   private miFormulario: FormGroup = this.fb.group({
-    name: [ "", [ Validators.required ] ],
-    password: [ "", [ Validators.required ] ],
+    name: [ "a", [ Validators.required ] ],
+    password: [ "a", [ Validators.required ] ],
   })
 
   get getMiFormulario() {
@@ -25,6 +26,13 @@ export class LoginComponent {
                private router: Router,
                private authService: AuthService ) {}
 
+
+  /**
+   * Logea al usuario
+   * 
+   * Método que comprueba los datos introducidos y
+   * navega a la página principal si son correctos.
+   */
   login() {
 
     const{ name, password } = this.miFormulario.value;

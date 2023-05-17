@@ -45,6 +45,16 @@ export class SearchBarComponent {
     
   }
 
+  /**
+   * Realiza la busqueda de los puntos que conicidan con la query y 
+   * el filtro seleccionados.
+   * 
+   * Método que comprueba el tipo de filtro elegido.
+   * Si es "favoritos" cargará los puntos favoritos.
+   * Si query esta vacío cargará todos los puntos.
+   * En cualquier otro caso hará un filtrado mediante 
+   * el filtro y la query.
+   */ 
   searchPoint() {
 
     const query = this.query.nativeElement.value.trim();
@@ -58,7 +68,7 @@ export class SearchBarComponent {
         this.mapDataService.chargePoints( query, filtro ).subscribe();
     }
     
-    this.query.nativeElement.value = "";
+    //this.query.nativeElement.value = "";
 
   }
 

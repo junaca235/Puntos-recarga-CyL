@@ -2,15 +2,14 @@
     <i class="pi pi-arrow-left arrow-return"></i>
 </a>
 
-<form class="mobile" 
+<section class="auth-content">
+
+  <form class="formulario" 
       autocomplete="off"
       [formGroup]="miFormulario"
       (ngSubmit)="registro()">
 
-    <div class="formulario">
-      <div class="form-content">
-
-        <h2 class="titulo log-in">Registro</h2>
+        <h2 class="titulo">Registro</h2>
 
         <div class="input-container">
           <input class="input"
@@ -44,7 +43,6 @@
              routerLink="/auth">INICIAR SESIÓN</a>
         </div>
 
-      </div>
-    </div>
-
 </form>
+
+</section>
