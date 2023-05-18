@@ -8,6 +8,7 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 
 import { Observable, forkJoin, map, BehaviorSubject, catchError } from 'rxjs';
 import Swal from 'sweetalert2';
+import { SweetAlertComponent } from 'src/app/shared/sweet-alert/sweet-alert.component';
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +42,8 @@ export class MapDataService {
 
   constructor( private http: HttpClient,
                private mapService: MapService,
-               private authService: AuthService ) { 
+               private authService: AuthService,
+               private sweetAlert: SweetAlertComponent ) { 
 
     this.getUserLocation();
 
@@ -110,8 +112,12 @@ export class MapDataService {
           
         }),
         catchError((error) => {
-          console.log('Error:', error);
-          Swal.fire( "Error", "No se encontraron puntos", "error" );
+          this.sweetAlert.showAlert({
+            toast: true,
+            title: "No se encontraron puntos",
+            icon: "error",
+            position: "bottom"
+          })
           return [];
         })
       );

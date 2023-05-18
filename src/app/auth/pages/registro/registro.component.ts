@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 
 import Swal from 'sweetalert2';
+import { SweetAlertComponent } from 'src/app/shared/sweet-alert/sweet-alert.component';
 
 @Component({
   selector: 'app-registro',
@@ -25,7 +26,8 @@ export class RegistroComponent {
   });
 
   constructor( private fb: FormBuilder,
-               private authService: AuthService ) {}
+               private authService: AuthService,
+               private sweetAlert: SweetAlertComponent ) {}
 
 
   /**
@@ -41,10 +43,17 @@ export class RegistroComponent {
     this.authService.registro(name, password)
       .subscribe( ok => {
         if ( ok === true ) {
-          Swal.fire( "Guardado", "Usuario registrado", "success" );
+          this.sweetAlert.showAlert({
+            toast: false,
+            title: "Usuario registrado",
+            icon: "success"
+          })
         } else {
-          //Muestra una alerta personalizada
-          Swal.fire( "Error", ok, "error" );
+          this.sweetAlert.showAlert({
+            toast: false,
+            title: ok+"",
+            icon: "error"
+          })
         }
       })
 

@@ -5,6 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { SharedModule } from './shared/shared.module';
+import { SweetAlertComponent } from './shared/sweet-alert/sweet-alert.component';
 
 @NgModule({
   declarations: [
@@ -14,9 +16,12 @@ import { AppComponent } from './app.component';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    SharedModule
   ],
-  providers: [],
+  providers: [
+    SweetAlertComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

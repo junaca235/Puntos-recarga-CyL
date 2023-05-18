@@ -16,16 +16,27 @@ html, body {
   --d: #5EA68D;
   --e: #38726C;
 }
+.button{
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+  padding: 6px 10px !important;
+}
+.button:focus{
+  background-color: white !important;
+  border-color: var(--primary) !important;
+  color: var(--primary) !important;
+}
+    /* Sweet Alert */
 .swal2-container {
-  z-index: 1200 !important;
+    z-index: 1200 !important;
+    /* background-color: rgb(red, green, blue, 0.3); */
 }
 .swal2-popup{
-  /* background-color: #000 !important; */
+    /* background: #000 !important; */
 }
 .swal2-popup button{
-  background-color: var(--primary) !important;
+    background-color: var(--primary) !important;
 }
-
     /* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px; /* Ancho del scrollbar */

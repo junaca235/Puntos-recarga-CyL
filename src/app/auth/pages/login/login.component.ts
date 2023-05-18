@@ -3,6 +3,7 @@ import { AuthService } from '../../services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { SweetAlertComponent } from 'src/app/shared/sweet-alert/sweet-alert.component';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,8 @@ export class LoginComponent {
 
   constructor( private fb: FormBuilder,
                private router: Router,
-               private authService: AuthService ) {}
+               private authService: AuthService,
+               private sweetAlert: SweetAlertComponent ) {}
 
 
   /**
@@ -32,6 +34,7 @@ export class LoginComponent {
    * 
    * Método que comprueba los datos introducidos y
    * navega a la página principal si son correctos.
+   * Si no coinciden muestra una alerta informando al ususario.
    */
   login() {
 
@@ -43,7 +46,13 @@ export class LoginComponent {
           this.router.navigateByUrl("/mapas");
         } else {
           //Muestra una alerta personalizada
-          Swal.fire( "Error", ok+"", "error" );
+          this.sweetAlert.showAlert({
+            toast: false,
+            title: "Error",
+            text: ok+"",
+            icon: "error",
+            timer: 2000
+          });
           this.miFormulario.reset();
         }
       } )

@@ -6,11 +6,11 @@
     </div>
     <div class="p-toolbar-group-end"
          *ngIf="!usuario; else logeado">
-        <p-button styleClass="p-button-success mr-2"
+        <p-button styleClass="p-button button"
                   routerLink="/auth/login">
             Iniciar sesión
         </p-button>
-        <p-button styleClass="p-button-danger"
+        <p-button styleClass="p-button button"
                   routerLink="/auth/registro">
             Registrarse
         </p-button>
@@ -19,7 +19,7 @@
     <ng-template #logeado>
         <div class="p-toolbar-group-end">
             <span>{{ usuario!.name }}</span>
-            <p-button styleClass="p-button-danger"
+            <p-button styleClass="p-button button"
                       (onClick)="logOut()">
                 Cerrar sesión
             </p-button>
