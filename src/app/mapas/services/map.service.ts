@@ -251,7 +251,7 @@ export class MapService {
         "line-join": "round"
       },
       paint: {
-        "line-color": "lightgreen",
+        "line-color": "green",
         "line-width": 3
       }
     });

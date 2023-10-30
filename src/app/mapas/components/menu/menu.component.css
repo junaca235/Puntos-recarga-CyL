@@ -1,4 +1,4 @@
-:host ::ng-deep .p-button.p-element{
+:host ::ng-deep .p-ripple{
   margin: auto;
   position: absolute;
   bottom: 0px;
@@ -8,6 +8,15 @@
   background-color: var(--primary);
   border-color: var(--primary);
   opacity: 0.7;
+
+  &:hover{
+    background-color: var(--secondary);
+    border-color: var(--seconsary);
+  }
+  &:active{
+    background-color: var(--terciary);
+    border-color: var(--terciary);
+  }
 }
 :host ::ng-deep .p-sidebar{
   height: fit-content;

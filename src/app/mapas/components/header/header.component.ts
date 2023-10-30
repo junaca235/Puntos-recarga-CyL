@@ -1,7 +1,5 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
-import { MapDataService } from '../../services/mapData.service';
-import { AuthService } from 'src/app/auth/services/auth.service';
-import { AuthResponse, Usuario } from 'src/app/auth/interfaces/auth.interface';
+import { Component, Input } from '@angular/core';
+import { AuthResponse } from 'src/app/auth/interfaces/auth.interface';
 
 @Component({
   selector: 'app-header',

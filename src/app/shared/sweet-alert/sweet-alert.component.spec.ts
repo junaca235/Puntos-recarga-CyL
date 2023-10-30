@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SwalComponent } from './swal.component';
+import { SweetAlertComponent } from './sweet-alert.component';
 
-describe('SwalComponent', () => {
-  let component: SwalComponent;
-  let fixture: ComponentFixture<SwalComponent>;
+describe('SweetAlertComponent', () => {
+  let component: SweetAlertComponent;
+  let fixture: ComponentFixture<SweetAlertComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SwalComponent ]
+      declarations: [ SweetAlertComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SwalComponent);
+    fixture = TestBed.createComponent(SweetAlertComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
