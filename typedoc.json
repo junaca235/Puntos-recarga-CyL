@@ -1,0 +1,14 @@
+{
+    "entryPoints": ["src/main.ts"],
+    "readme": "./README.md",
+    "includes": "**/*.md",
+    //"exclude": ["**/*.spec.ts"],
+    /* "mode": "file",
+    "excludePrivate": true,
+    "excludeProtected": true,
+    "excludeExternals": true,
+    "excludeNotExported": true, */
+    "theme": "default",
+    "name": "My Project API Documentation"
+}
+  
