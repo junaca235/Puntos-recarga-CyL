@@ -1,7 +1,6 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { MapDataService } from '../../services/mapData.service';
 import { Record } from '../../interface/punto';
-import { MessageService } from 'primeng/api';
 
 interface filtro {
   name: string;
@@ -15,7 +14,6 @@ interface filtro {
 })
 export class SearchBarComponent {
 
-  //private debounceTimer?: NodeJS.Timeout
   @ViewChild("query") query!: ElementRef 
   @ViewChild("selectFiltro") selectFiltro!: ElementRef 
   hasFavPoints: boolean = false; 

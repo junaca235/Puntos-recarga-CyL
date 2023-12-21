@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MapDataService } from '../../services/mapData.service';
 import { MapService } from '../../services/map.service';
-import { LngLatLike, Marker } from 'mapbox-gl';
+import { LngLat } from 'mapbox-gl';
 
 @Component({
   selector: 'app-location-button',
@@ -23,7 +23,7 @@ export class LocationButtonComponent {
     const userLocation = this.mapDataService.getLocation;
 
     if(userLocation){
-      this.mapService.flyTo( userLocation as LngLatLike);
+      this.mapService.flyTo( {lng: userLocation[1], lat: userLocation[0]} as LngLat);
     } else {
       this.mapDataService.getUserLocation()
     }

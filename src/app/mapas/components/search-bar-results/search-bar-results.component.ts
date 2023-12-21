@@ -1,8 +1,9 @@
-import { Component, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
+import { Component } from '@angular/core';
 import { MapDataService } from '../../services/mapData.service';
 import { MapService } from '../../services/map.service';
 import { Record } from '../../interface/punto';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { LngLat } from 'mapbox-gl';
 
 @Component({
   selector: 'app-search-bar-results',
@@ -14,7 +15,6 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 })
 export class SearchBarResultsComponent {
 
-  //@ViewChild("elementLi") elementLi!: ElementRef;
   selectedId: string = "";
   puntosFavoritos: string[] | undefined;
   puntos: Record[] = [];
@@ -30,31 +30,24 @@ export class SearchBarResultsComponent {
 
   ngOnInit(): void {
     
+    //Se mantiene a la espera del cambio de valor de "popupData"
     this.mapService.getPopupData
       .subscribe( ( data ) => {
         const coord = `${data.lat},${data.lng}`;
         this.selectedId = coord
-        //console.log(`${data.lat},${data.lng}`)
         this.scrollToListItem( coord );
-      })
-    this.userLocation = this.mapDataService.getLocation;
+      });
 
-      /* this.mapDataService.getPuntos()
-        .subscribe( puntos => {
-          this.puntos = puntos
-          console.log("puntos actualizados")
-         } ); */
-         //this.mapDataService.getPuntos()
-        
-        
-      this.puntosFavoritos = this.mapDataService.getPuntosFavoritos;
-      this.mapDataService.getPuntos
-        .subscribe( puntos => {
-          this.puntos = puntos
-          if( this.puntosFavoritos ) {
-            this.checkFavourites();
-          }
-        } );
+    this.userLocation = this.mapDataService.getLocation;
+    this.puntosFavoritos = this.mapDataService.getPuntosFavoritos;
+
+    this.mapDataService.getPuntos
+      .subscribe( puntos => {
+        this.puntos = puntos
+        if( this.puntosFavoritos ) {
+          this.checkFavourites();
+        }
+      } );
 
   }
 
@@ -64,9 +57,7 @@ export class SearchBarResultsComponent {
    * @param punto Punto del mapa donde debe centrarse
    */
   flyTo( punto: Record ){
-    //const coord = punto.fields.dd.join(",");
-    //this.selectedId = coord;
-    this.mapService.flyTo( [punto.fields.dd[1], punto.fields.dd[0]] );
+    this.mapService.flyTo( {lng: punto.fields.dd[1], lat: punto.fields.dd[0]} as LngLat );
   }
 
   /**
@@ -130,8 +121,6 @@ export class SearchBarResultsComponent {
             this.mapDataService.getUsuario.recordid?.push(puntoId)
           }
           this.puntosFavoritos = this.mapDataService.getUsuario.recordid;
-          //this.puntosFavoritos = this.mapDataService.puntosFavoritos;
-          console.log(this.puntosFavoritos, punto?.favourite)
         }
       });
 

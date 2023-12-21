@@ -59,23 +59,21 @@ export class MapService {
    * Método que centra el mapa en las coordenadas pasadas como
    * parámetro. 
    * Si el mapa aún no esta listo lanza un error. 
-   * Si no encuentra el marcador muestra un mensaje informativo.
+   * Si no encuentra el marcador lo crea y lo coloca en el mapa
    * 
    * @param coords Coordenadas donde se centrará el mapa
    */
-  flyTo( coords: LngLatLike ) {
-    
-    if ( !this.isMapReady)  throw Error("El mapa no está inicializado");
+  flyTo( coords: LngLat ) {
 
-    if( !this.markers.find( m => m.setLngLat( coords ) ) ){
-      console.log(" Marcador no encontrado ")
-      Swal.fire( "Error", "Marcador no encontrado", "error" );
+    if( !this.isMapReady)  throw Error("El mapa no está inicializado");
+
+    if( !this.markers.find(m => m.getLngLat().lat === coords.lat && m.getLngLat().lng === coords.lng)){
+      this.markers.push(this.createNewMarker([coords.lng, coords.lat]).addTo(this.mapa!));
     }
 
     this.mapa?.flyTo( {
       center: coords
-    } );
-
+    });
   }
 
   /** 
@@ -102,7 +100,7 @@ export class MapService {
         observer.next( this.mapa! );
         observer.complete;
       })
-      
+
     })
   }
 
@@ -175,7 +173,11 @@ export class MapService {
    */
   getRouteBetweenPoints( start: [number, number], end: [number, number] ) {
 
+    //Elimina los marcadores del mapa
     this.markers.forEach( marker => marker.remove() );
+    //Lispia el array
+    this.markers = [];
+    console.log(this.markers)
 
     let newMarker = this.createNewMarker( end )
     .addTo(this.mapa!);
@@ -208,7 +210,6 @@ export class MapService {
    * @param route Coordenadas de la ruta a pintar
    */
   private drawPolyLine( route: Route ) {
-    console.log( { km: route.distance / 1000 } );
 
     const bounds = new LngLatBounds();
     const coords = route.geometry.coordinates;
@@ -268,7 +269,6 @@ export class MapService {
     } 
   }
 
-
   /**
    * Crea un nuevo marcador.
    * 
@@ -306,7 +306,6 @@ export class MapService {
    */
   clickPopup( data: LngLat ) {
     if( data.lng == this.userLocation![1] && data.lat == this.userLocation![0] ){ return } 
-    console.log(data)
     this.popupData.next( data )
     this.flyTo( data );
   }
